@@ -7,8 +7,7 @@ tag_exceptions=['INDI','FAM']
 #go through file line by line
 for l in file:
     #get rid of unnecessary characters from file
-    line = l.replace("\n", "")
-    line = line.replace("\r","")
+    line = l.strip()
 
     #print the input
     print('--> ' + line)
