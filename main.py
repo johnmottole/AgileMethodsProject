@@ -11,7 +11,7 @@ for l in file:
     line = line.replace("\r","")
 
     #print the input
-    print '--> ' + line
+    print('--> ' + line)
 
     #break up line into at most 3 sections
     parts = line.split(' ',2)
@@ -44,4 +44,4 @@ for l in file:
                 else:
                     output += "|N"
     #print the output of the current line
-    print output
+    print(output)
