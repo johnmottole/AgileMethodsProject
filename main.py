@@ -171,6 +171,21 @@ def main():
     results = create_indiv_objects(parts)
 
     individuals = results[0]
+        
+
+    #go through fam list and print each fam
+    families = results[1]
+    link_indiv_fam(individuals, families)
+
+
+##Debugging 
+##    print("INDIVIDUALS: ")
+##    for i in individuals:
+##        print(i.to_string())
+##
+##    print("FAMILIES: ")
+##    for f in families:
+##       print(f.to_string())
 
     x = PrettyTable()
     x.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
@@ -180,21 +195,16 @@ def main():
         x.add_row([individuals[i].id, individuals[i].name, individuals[i].gender, individuals[i].birthday, individuals[i].age, individuals[i].alive, individuals[i].death, individuals[i].child, individuals[i].spouse])
         i += 1
     print(x)
-        
-
-    #go through fam list and print each fam
-    families = results[1]
-    link_indiv_fam(individuals, families)
 
 
-
-    print("INDIVIDUALS: ")
-    for i in individuals:
-        print(i.to_string())
-
-    print("FAMILIES: ")
-    for f in families:
-       print(f.to_string())
-
+    y = PrettyTable()
+    y.field_names = ["ID", "Married", "Divorced", "Husband Name", "Husband ID", "Wife Name", "Wife ID", "Children"]
+    fam_num = len(families)
+    k = 0
+    while (k < fam_num):
+        y.add_row([families[k].id, families[k].married, families[k].divorced, families[k].husband_name, families[k].husband_id, families[k].wife_name, families[k].wife_id, families[k].children])
+        k += 1
+    print(y)
+    
 if __name__=="__main__":
 	main()
