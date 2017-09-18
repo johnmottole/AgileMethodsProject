@@ -1,3 +1,6 @@
+from pprint import pprint
+from datetime import date
+
 #Defines family object
 class Family:
     id = "NA"
@@ -18,7 +21,7 @@ class Individual:
     gender = "NA"
     birthday = "NA"
     age = "NA"
-    alive = "NA"
+    alive = 'True'
     death = "NA"
     child = []
     spouse = "NA"
@@ -69,10 +72,11 @@ def create_indiv_objects(part_list):
     current_fam = None
 
     #go through each broken up line
-    for parts in part_list:
-        #if first part if line is a 0, then something new is being created, so append current indiv or fam to appriate list and set current_indiv or current_fam to empty
+    for index, parts in enumerate(part_list):
+        #if first part of line is a 0, then something new is being created, so append current indiv or fam to appriate list and set current_indiv or current_fam to empty
         if (len(parts) > 0 and parts[0] == '0'):
             if current_indiv != None:
+                #RL -- right before 
                 individuals.append(current_indiv)
                 current_indiv = None
             elif current_fam != None:
@@ -102,12 +106,24 @@ def create_indiv_objects(part_list):
                     current_indiv.gender = parts[2]
                 elif parts[1] == 'CHIL':
                     current_indiv.child += parts[2]
+                #RL -- death in our file is a Y/N? no dates available
+                elif parts[1] == 'DEAT':
+                    current_indiv.death = 'Y'
+                    current_indiv.alive = 'False'
             # if current_fam is not None, then it is being defined so this line is defining one of its properties
             elif current_fam != None :
                 if parts[1] == 'HUSB':
                     current_fam.husband_id = parts[2]
                 elif parts[1] == 'WIFE':
                     current_fam.wife_id = parts[2]
+
+        #RL --  calling birthday adder and age adder
+        if (len(parts) == 2):
+            if(parts[1] == 'BIRT'):
+                current_indiv.birthday = birthday_adder(part_list, index)
+                current_indiv.age = age_adder(current_indiv.birthday)
+        
+        
 
     #Return individual list and family list
     return (individuals, families)
@@ -122,6 +138,20 @@ def link_indiv_fam(individuals, familes):
         if (wife != None):
             f.wife_name = wife.name
 
+#RL -- adds birthday to the individual
+def birthday_adder(part_list, index):
+    return part_list[index + 1][2];
+
+#RL -- calculates age 
+def age_adder(birth):
+    months = {'JAN' : 1, 'FEB' : 2, 'MAR' : 3,
+              'APR' : 4, 'MAY' : 5, 'JUN' : 6,
+              'JUL' : 7, 'AUG' : 8, 'SEP' : 9,
+              'OCT' : 10, 'NOV' : 11, 'DEC' : 12 }
+    birth_list = birth.split(' ');
+    b_date = date(int(birth_list[2]), months[birth_list[1]], int(birth_list[0]) )
+    c_date = date.today()
+    return str(c_date.year - b_date.year -((c_date.month, c_date.day) < (b_date.month, b_date.day)))
 
 def main():
     #get list of broken up lines from file
@@ -134,14 +164,15 @@ def main():
     individuals = results[0]
     print("INDIVIDUALS: ")
     for i in individuals:
-        print(i.to_string())
+       print(i.to_string())
 
     #go through fam list and print each fam
     families = results[1]
     link_indiv_fam(individuals, families)
+
     print("FAMILIES: ")
     for f in families:
-        print(f.to_string())
+       print(f.to_string())
 
 if __name__=="__main__":
 	main()
