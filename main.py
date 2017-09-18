@@ -1,5 +1,6 @@
 from pprint import pprint
 from datetime import date
+from prettytable import PrettyTable
 
 #Defines family object
 class Family:
@@ -170,6 +171,16 @@ def main():
     results = create_indiv_objects(parts)
 
     individuals = results[0]
+
+    x = PrettyTable()
+    x.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+    individual_num = len(individuals)
+    i = 0
+    while (i < individual_num):
+        x.add_row([individuals[i].id, individuals[i].name, individuals[i].gender, individuals[i].birthday, individuals[i].age, individuals[i].alive, individuals[i].death, individuals[i].child, individuals[i].spouse])
+        i += 1
+    print(x)
+        
 
     #go through fam list and print each fam
     families = results[1]
