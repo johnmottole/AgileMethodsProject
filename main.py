@@ -13,7 +13,7 @@ class Family:
     children = []
     #to string (used for testing)
     def to_string(self):
-        return "id: " + self.id + " married: " + self.married + " divorced: " + self.divorced + " hus_id: " + self.husband_id + " hus_name: " + self.husband_name + " wife_id: " + self.wife_id + " wife_name: " + self.wife_name #+ " children: " + self.children
+        return "id: " + self.id + " married: " + self.married + " divorced: " + self.divorced + " hus_id: " + self.husband_id + " hus_name: " + self.husband_name + " wife_id: " + self.wife_id + " wife_name: " + self.wife_name + " children: " + ','.join(self.children)
 #Defines individual object
 class Individual:
     id = "NA"
@@ -28,7 +28,7 @@ class Individual:
 
     #to string (used for testing)
     def to_string(self):
-        res =  "id: " + self.id + " name: " + self.name + " gender: " + self.gender + " birthday: " + self.birthday + " age: " + self.age + " alive: " + self.alive + " death: " + self.death + " spouse: " + self.spouse #+ " child: " + self.child
+        res =  "id: " + self.id + " name: " + self.name + " gender: " + self.gender + " birthday: " + self.birthday + " age: " + self.age + " alive: " + self.alive + " death: " + self.death + " spouse: " + self.spouse + " child: " + ",".join(self.child)
         return res
 
 def readFile():
@@ -116,6 +116,8 @@ def create_indiv_objects(part_list):
                     current_fam.husband_id = parts[2]
                 elif parts[1] == 'WIFE':
                     current_fam.wife_id = parts[2]
+                elif parts[1] == 'CHIL':
+                    current_fam.children = current_fam.children + [parts[2]]
 
         #RL --  calling birthday adder and age adder
         if (len(parts) == 2):
@@ -134,9 +136,14 @@ def link_indiv_fam(individuals, familes):
         husband = find_indivual_by_id(individuals,f.husband_id)
         if (husband != None):
             f.husband_name = husband.name
+            husband.child = f.children
+            husband.spouse = f.wife_id
+
         wife = find_indivual_by_id(individuals, f.wife_id)
         if (wife != None):
+            wife.child = f.children
             f.wife_name = wife.name
+            wife.spouse = f.husband_id
 
 #RL -- adds birthday to the individual
 def birthday_adder(part_list, index):
@@ -153,6 +160,8 @@ def age_adder(birth):
     c_date = date.today()
     return str(c_date.year - b_date.year -((c_date.month, c_date.day) < (b_date.month, b_date.day)))
 
+
+
 def main():
     #get list of broken up lines from file
     parts = readFile()
@@ -160,15 +169,17 @@ def main():
     #get list of individual objects and family objects from broken up lines
     results = create_indiv_objects(parts)
 
-    #go through indiv list and print each individual
     individuals = results[0]
-    print("INDIVIDUALS: ")
-    for i in individuals:
-       print(i.to_string())
 
     #go through fam list and print each fam
     families = results[1]
     link_indiv_fam(individuals, families)
+
+
+
+    print("INDIVIDUALS: ")
+    for i in individuals:
+        print(i.to_string())
 
     print("FAMILIES: ")
     for f in families:
