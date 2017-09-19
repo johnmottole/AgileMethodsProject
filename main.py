@@ -121,11 +121,16 @@ def create_indiv_objects(part_list):
                     current_fam.children = current_fam.children + [parts[2]]
 
 
+
         #RL --  calling birthday adder and age adder
         if (len(parts) == 2):
             if(parts[1] == 'BIRT'):
                 current_indiv.birthday = day_adder(part_list, index)
                 current_indiv.age = age_adder(current_indiv.birthday)
+            if (parts[1] == 'MARR'):
+                current_fam.married = day_adder(part_list,index)
+            if (parts[1] == 'DIV'):
+                current_fam.divorced = day_adder(part_list,index)
         
         
 
