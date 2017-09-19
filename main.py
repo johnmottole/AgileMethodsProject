@@ -108,8 +108,8 @@ def create_indiv_objects(part_list):
                     current_indiv.child += parts[2]
                 #RL -- death in our file is a Y/N? no dates available
                 elif parts[1] == 'DEAT':
-                    current_indiv.death = 'Y'
                     current_indiv.alive = 'False'
+                    current_indiv.death = day_adder(part_list, index)
             # if current_fam is not None, then it is being defined so this line is defining one of its properties
             elif current_fam != None :
                 if parts[1] == 'HUSB':
@@ -119,10 +119,11 @@ def create_indiv_objects(part_list):
                 elif parts[1] == 'CHIL':
                     current_fam.children = current_fam.children + [parts[2]]
 
+
         #RL --  calling birthday adder and age adder
         if (len(parts) == 2):
             if(parts[1] == 'BIRT'):
-                current_indiv.birthday = birthday_adder(part_list, index)
+                current_indiv.birthday = day_adder(part_list, index)
                 current_indiv.age = age_adder(current_indiv.birthday)
         
         
@@ -146,7 +147,7 @@ def link_indiv_fam(individuals, familes):
             wife.spouse = f.husband_id
 
 #RL -- adds birthday to the individual
-def birthday_adder(part_list, index):
+def day_adder(part_list, index):
     return part_list[index + 1][2];
 
 #RL -- calculates age 
