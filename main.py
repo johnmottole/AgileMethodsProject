@@ -84,6 +84,8 @@ def create_indiv_objects(part_list):
                 families.append(current_fam)
                 current_fam = None
 
+        exeption1 = (len(parts) == 3 and parts[0] == '1' and parts[1] == 'DATE')
+        exception2 = (len(parts) == 3 and parts[0] == '2' and parts[1] == 'NAME')
         # create new indiviual or family object if parts[2] is a 'INDI' or 'FAM"
         if len(parts) == 3 and parts[2] in tag_exceptions:
             if (parts[2] == 'INDI'):
@@ -92,13 +94,8 @@ def create_indiv_objects(part_list):
             else:
                 current_fam = Family()
                 current_fam.id = parts[1]
-        #Ignoring these
-        elif len(parts) == 3 and parts[0] == '1' and parts[1] == 'DATE':
-            print("cant process")
-        elif len(parts) == 3 and parts[0] == '2' and parts[1] == 'NAME':
-            print("cant process")
         # if line has none of the exceptions, and is a '1' then its a property of current object
-        elif len(parts) == 3 and parts[0] == '1':
+        elif len(parts) == 3 and parts[0] == '1' and exeption1 is False and exception2 is False:
             # if current_indiv is not None, then it is being defined so this line is defining one of its properties
             if current_indiv != None:
                 if parts[1] == 'NAME':
@@ -120,8 +117,6 @@ def create_indiv_objects(part_list):
                 elif parts[1] == 'CHIL':
                     current_fam.children = current_fam.children + [parts[2]]
 
-
-
         #RL --  calling birthday adder and age adder
         if (len(parts) == 2):
             if(parts[1] == 'BIRT'):
@@ -131,8 +126,7 @@ def create_indiv_objects(part_list):
                 current_fam.married = day_adder(part_list,index)
             if (parts[1] == 'DIV'):
                 current_fam.divorced = day_adder(part_list,index)
-        
-        
+
 
     #Return individual list and family list
     return (individuals, families)
