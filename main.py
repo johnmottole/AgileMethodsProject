@@ -24,7 +24,7 @@ class Individual:
     age = "NA"
     alive = 'True'
     death = "NA"
-    child = []
+    child = "NA"
     spouse = "NA"
 
     #to string (used for testing)
@@ -117,6 +117,7 @@ def create_indiv_objects(part_list):
                 elif parts[1] == 'CHIL':
                     current_fam.children = current_fam.children + [parts[2]]
 
+
         #RL --  calling birthday adder and age adder
         if (len(parts) == 2):
             if(parts[1] == 'BIRT'):
@@ -128,6 +129,7 @@ def create_indiv_objects(part_list):
                 current_fam.divorced = day_adder(part_list,index)
 
 
+
     #Return individual list and family list
     return (individuals, families)
 
@@ -137,14 +139,17 @@ def link_indiv_fam(individuals, familes):
         husband = find_indivual_by_id(individuals,f.husband_id)
         if (husband != None):
             f.husband_name = husband.name
-            husband.child = f.children
-            husband.spouse = f.wife_id
+            husband.spouse = f.id
 
         wife = find_indivual_by_id(individuals, f.wife_id)
         if (wife != None):
-            wife.child = f.children
             f.wife_name = wife.name
-            wife.spouse = f.husband_id
+            wife.spouse = f.id
+
+        for child in f.children:
+            child_obj = find_indivual_by_id(individuals, child)
+            if (child_obj != None):
+                child_obj.child = f.id
 
 #RL -- adds birthday to the individual
 def day_adder(part_list, index):
