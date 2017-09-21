@@ -1,36 +1,7 @@
-from pprint import pprint
 from datetime import date
 from prettytable import PrettyTable
-
-#Defines family object
-class Family:
-    id = "NA"
-    married = "NA"
-    divorced = "NA"
-    husband_id = "NA"
-    husband_name = "NA"
-    wife_id = "NA"
-    wife_name = "NA"
-    children = []
-    #to string (used for testing)
-    def to_string(self):
-        return "id: " + self.id + " married: " + self.married + " divorced: " + self.divorced + " hus_id: " + self.husband_id + " hus_name: " + self.husband_name + " wife_id: " + self.wife_id + " wife_name: " + self.wife_name + " children: " + ','.join(self.children)
-#Defines individual object
-class Individual:
-    id = "NA"
-    name = "NA"
-    gender = "NA"
-    birthday = "NA"
-    age = "NA"
-    alive = 'True'
-    death = "NA"
-    child = "NA"
-    spouse = "NA"
-
-    #to string (used for testing)
-    def to_string(self):
-        res =  "id: " + self.id + " name: " + self.name + " gender: " + self.gender + " birthday: " + self.birthday + " age: " + self.age + " alive: " + self.alive + " death: " + self.death + " spouse: " + self.spouse + " child: " + ",".join(self.child)
-        return res
+from individual_and_family import *
+from userstories import *
 
 def readFile():
     #open file
@@ -167,7 +138,6 @@ def age_adder(birth):
     return str(c_date.year - b_date.year -((c_date.month, c_date.day) < (b_date.month, b_date.day)))
 
 
-
 def main():
     #get list of broken up lines from file
     parts = readFile()
@@ -176,22 +146,10 @@ def main():
     results = create_indiv_objects(parts)
 
     individuals = results[0]
-        
-
-    #go through fam list and print each fam
     families = results[1]
     link_indiv_fam(individuals, families)
 
-
-##Debugging 
-##    print("INDIVIDUALS: ")
-##    for i in individuals:
-##        print(i.to_string())
-##
-##    print("FAMILIES: ")
-##    for f in families:
-##       print(f.to_string())
-
+    #At this point the data has been completed processed
     x = PrettyTable()
     x.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
     individual_num = len(individuals)
@@ -201,7 +159,6 @@ def main():
         i += 1
     print(x)
 
-
     y = PrettyTable()
     y.field_names = ["ID", "Married", "Divorced", "Husband Name", "Husband ID", "Wife Name", "Wife ID", "Children"]
     fam_num = len(families)
@@ -210,6 +167,11 @@ def main():
         y.add_row([families[k].id, families[k].married, families[k].divorced, families[k].husband_name, families[k].husband_id, families[k].wife_name, families[k].wife_id, families[k].children])
         k += 1
     print(y)
+
+
+    #Have User story checker perform all checks on data
+    checker = UserStoryChecker()
+    checker.check_all_stories(individuals,families)
     
 if __name__=="__main__":
 	main()
