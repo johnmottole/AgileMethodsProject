@@ -9,7 +9,9 @@ class UserStoryChecker:
     def check_all_stories(self, i, f):
         self.individuals = i
         self.families = f
+        #User story 9
         self.birth_before_death_of_parent()
+        #User Story 10
         self.marriage_after_14()
 
     #can be used by family and individual because both have id property
