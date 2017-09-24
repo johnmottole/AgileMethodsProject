@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 class UserStoryChecker:
@@ -14,6 +14,7 @@ class UserStoryChecker:
         #User Story 10
         self.marriage_after_14()
         self.marriage_to_descend()
+        self.dates_before_today()
 
     #can be used by family and individual because both have id property
     def find_by_id(self, object_list, id):
@@ -81,6 +82,37 @@ class UserStoryChecker:
                 elif(childSpouse == father):
                     print("Error US17: " + father.name + " (" + father.id + ") is married to a descendant ")
 
+    #User story 1, dates not after current date                
+    def dates_before_today(self):
+        current_date = date.today()
+        for i in self.individuals:
+            individual_birthday = self.find_by_id(self.individuals, i.birthday)
+            individual_death = self.find_by_id(self.individuals, i.death)
+            try:
+                if individual_birthday > current_date:
+                    print("Error US01: {} birthday is after today; are you a time traveler?".format(i.name))
+                if individual_death > current_date:
+                    print("Error US01: {} date of death is after today; are you a time traveler?".format(i.name))
+            except:
+                pass
+        #Need to check for existence of dates first before try except        
+        for f in self.families:
+            divorce_date = self.find_by_id(self.individuals, f.divorced)
+            married_date = self.find_by_id(self.individuals, f.married)
+            if (divorce_date != None):
+                try:
+                    if divorce_date > current_date:
+                        print("Error US01: {} divorce date is after today; are you a time traveler?".format(f.name))
+                except:
+                    pass
+                
+            if (married_date != None):
+                try:
+                    if married_date > current_date:
+                        if married_date > current_date:
+                            print("Error US01: {} marriage date is after today; are you a time traveler?".format(f.name))
+                except:
+                    pass
 
 
 
