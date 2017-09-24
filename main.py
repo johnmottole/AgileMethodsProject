@@ -2,6 +2,7 @@ from datetime import date
 from prettytable import PrettyTable
 from individual_and_family import *
 from userstories import *
+from homework4test import *
 
 def readFile():
     #open file
@@ -172,6 +173,9 @@ def main():
     #Have User story checker perform all checks on data
     checker = UserStoryChecker()
     checker.check_all_stories(individuals,families)
+
+    tester = testUserStory17().test_marriageChecker()
+    
     
 if __name__=="__main__":
 	main()

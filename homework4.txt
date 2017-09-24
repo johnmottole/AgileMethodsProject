@@ -1,0 +1,51 @@
+Matt Colozzo
+Homework 4
+"I pledge my honor that I have abided by the Stevens Honor System"
+
+ def marriage_to_descend(self):
+        for f in self.families:
+            mother = self.find_by_id(self.individuals,f.wife_id)
+            father= self.find_by_id(self.individuals, f.husband_id)
+            ##print(mother)
+            for child in f.children:
+                myChild = self.find_by_id(self.individuals, child)
+                childSpouse = self.find_by_id(self.individuals, myChild.spouse)
+                if(childSpouse == mother):
+                    print("Error US17:  " + mother.name + " (" + mother.id + ") is married to a descendant")
+                    return True
+                elif(childSpouse == father):
+                    print("Error US17: " + father.name + " (" + father.id + ") is married to a descendant ")
+                    return True
+        return False
+
+
+import unittest
+from individual_and_family import *
+from userstories import *
+
+checker = UserStoryChecker()
+class testUserStory17(unittest.TestCase):
+
+    def test_marriageChecker(self):
+        self.assertEqual(checker.marriage_to_descend(), False)
+        print("Passed Equivalence")
+        self.assertFalse(checker.marriage_to_descend(), Family)
+        print("Passed did not return a family")
+        self.assertFalse(checker.marriage_to_descend(), Individual)
+        print("-----passed------")
+        self.assertFalse(checker.marriage_to_descend(), int)
+        print("-----passed------")
+        self.assertFalse(checker.marriage_to_descend(), str)
+        print("-----passed------")
+
+    def runTest():
+        test_marriageChecker()
+      
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+
+
+

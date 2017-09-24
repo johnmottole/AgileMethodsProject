@@ -1,5 +1,6 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+import unittest
 
 class UserStoryChecker:
     individuals = []
@@ -73,13 +74,21 @@ class UserStoryChecker:
         for f in self.families:
             mother = self.find_by_id(self.individuals,f.wife_id)
             father= self.find_by_id(self.individuals, f.husband_id)
+            ##print(mother)
             for child in f.children:
                 myChild = self.find_by_id(self.individuals, child)
                 childSpouse = self.find_by_id(self.individuals, myChild.spouse)
                 if(childSpouse == mother):
                     print("Error US17:  " + mother.name + " (" + mother.id + ") is married to a descendant")
+                    return True
                 elif(childSpouse == father):
                     print("Error US17: " + father.name + " (" + father.id + ") is married to a descendant ")
+                    return True
+        return False
+
+
+
+
 
 
 
