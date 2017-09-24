@@ -13,6 +13,7 @@ class UserStoryChecker:
         self.birth_before_death_of_parent()
         #User Story 10
         self.marriage_after_14()
+        self.marriage_to_descend()
 
     #can be used by family and individual because both have id property
     def find_by_id(self, object_list, id):
@@ -67,6 +68,20 @@ class UserStoryChecker:
                             print("Anomaly US10:  " + spouse.name + " (" + spouse.id + ") is married but is less than 14 years old")
                     except:
                         pass
+    
+    def marriage_to_descend(self):
+        for f in self.families:
+            mother = self.find_by_id(self.individuals,f.wife_id)
+            father= self.find_by_id(self.individuals, f.husband_id)
+            for child in f.children:
+                myChild = self.find_by_id(self.individuals, child)
+                childSpouse = self.find_by_id(self.individuals, myChild.spouse)
+                if(childSpouse == mother):
+                    print("Error US17:  " + mother.name + " (" + mother.id + ") is married to a descendant")
+                elif(childSpouse == father):
+                    print("Error US17: " + father.name + " (" + father.id + ") is married to a descendant ")
+
+
 
 
 
