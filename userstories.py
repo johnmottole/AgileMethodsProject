@@ -13,7 +13,11 @@ class UserStoryChecker:
         self.birth_before_death_of_parent()
         #User Story 10
         self.marriage_after_14()
+        #US17
         self.marriage_to_descend()
+        #US18
+        
+        #US01
         self.dates_before_today()
         #US02
         self.birth_before_marriage()
@@ -134,9 +138,9 @@ class UserStoryChecker:
             famDict[y.id] = y
         for i in self.individuals:
             if i.spouse != 'NA':
-                marr_date = famDict[i.spouse].married.split()
-                bir_date = i.birthday.split()
-                if int(marr_date[2]) <= int(bir_date[2]):
+                marr_date = famDict[i.spouse].married#.split()
+                bir_date = i.birthday#.split()
+                if self.compare_dates(marr_date, bir_date) > 0:#int(marr_date[2]) <= int(bir_date[2]):
                     print("Error US02: " + i.name + " married before born.")
                             
             
