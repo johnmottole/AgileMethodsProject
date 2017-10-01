@@ -15,7 +15,8 @@ class UserStoryChecker:
         self.marriage_after_14()
         self.marriage_to_descend()
         self.dates_before_today()
-        #self.birth_before_marriage()
+        #US02
+        self.birth_before_marriage()
         #US25
         self.unique_first_names()
         #US26
@@ -120,27 +121,43 @@ class UserStoryChecker:
 
     #User story 2
     def birth_before_marriage(self):
+        #dictionaries for easies
+        indiDict = {}
+        famDict = {}
+        months = {'JAN' : 1, 'FEB' : 2, 'MAR' : 3,
+              'APR' : 4, 'MAY' : 5, 'JUN' : 6,
+              'JUL' : 7, 'AUG' : 8, 'SEP' : 9,
+              'OCT' : 10, 'NOV' : 11, 'DEC' : 12 }
+        for x in self.individuals:
+            indiDict[x.id] = x
+        for y in self.families:
+            famDict[y.id] = y
         for i in self.individuals:
-            birthday = i.birthday
-            #Need to create new object to hold family class to sort by values
-            family = self.find_by_id(self.families, i.spouse)
-            if family != None:
-                marriage_date = family.married
-            if marriage_date != None:
-                try:
-                    if birthday >= marriage_date:
-                        print("Error US02: {}'s marriage date is before their date of birth".format(i.name))
-                except:
-                    pass
-            print (marriage_date)
+            if i.spouse != 'NA':
+                marr_date = famDict[i.spouse].married.split()
+                bir_date = i.birthday.split()
+                if int(marr_date[2]) <= int(bir_date[2]):
+                    print("Error US02: " + i.name + " married before born.")
+                            
+            
+##            birthday = i.birthday
+##            #Need to create new object to hold family class to sort by values
+##            family = self.find_by_id(self.families, i.spouse)
+##            if family != None:
+##                marriage_date = family.married
+##            if marriage_date != None:
+##                try:
+##                    if birthday >= marriage_date:
+##                        print("Error US02: {}'s marriage date is before their date of birth".format(i.name))
+##                except:
+##                    pass
+##            print (marriage_date)
 
     #User story 25
     #no more than one child with same name and birth date in fam
     #returns list of lists of duplicates
     def unique_first_names(self):
         all_indivs = self.individuals
-        #for i in all_indivs:
-            #print(i.to_string())
         #this holds all dupe kids
         error_kids_all = []
         for fam in self.families:
