@@ -73,8 +73,10 @@ def create_indiv_objects(part_list):
                     current_indiv.name = parts[2]
                 elif parts[1] == 'SEX':
                     current_indiv.gender = parts[2]
-                elif parts[1] == 'CHIL':
-                    current_indiv.child += parts[2]
+                elif parts[1] == 'FAMC':
+                    current_indiv.child = parts[2]
+                elif parts[1] == 'FAMS':
+                    current_indiv.spouse = parts[2]
                 #RL -- death in our file is a Y/N? no dates available
                 elif parts[1] == 'DEAT':
                     current_indiv.alive = 'False'
@@ -105,22 +107,23 @@ def create_indiv_objects(part_list):
     return (individuals, families)
 
 #goes through each family and gets names of husband and wives
+#RL commenting some of this out to allow errors through for US26
 def link_indiv_fam(individuals, familes):
     for f in familes:
         husband = find_indivual_by_id(individuals,f.husband_id)
         if (husband != None):
             f.husband_name = husband.name
-            husband.spouse = f.id
+            #husband.spouse = f.id
 
         wife = find_indivual_by_id(individuals, f.wife_id)
         if (wife != None):
             f.wife_name = wife.name
-            wife.spouse = f.id
+            #wife.spouse = f.id
 
-        for child in f.children:
-            child_obj = find_indivual_by_id(individuals, child)
-            if (child_obj != None):
-                child_obj.child = f.id
+##        for child in f.children:
+##            child_obj = find_indivual_by_id(individuals, child)
+##            if (child_obj != None):
+##                child_obj.child = f.id
 
 #RL -- adds birthday to the individual
 def day_adder(part_list, index):

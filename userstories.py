@@ -15,7 +15,11 @@ class UserStoryChecker:
         self.marriage_after_14()
         self.marriage_to_descend()
         self.dates_before_today()
-        self.birth_before_marriage()
+        #self.birth_before_marriage()
+        #US25
+        self.unique_first_names()
+        #US26
+        self.corresp_entries()
 
     #can be used by family and individual because both have id property
     def find_by_id(self, object_list, id):
@@ -130,7 +134,78 @@ class UserStoryChecker:
                     pass
             print (marriage_date)
 
+    #User story 25
+    #no more than one child with same name and birth date in fam
+    #returns list of lists of duplicates
+    def unique_first_names(self):
+        all_indivs = self.individuals
+        #for i in all_indivs:
+            #print(i.to_string())
+        #this holds all dupe kids
+        error_kids_all = []
+        for fam in self.families:
+            #this is a temp container for kids in each family
+            kid_holder = []
+            kids = fam.children
+            for kid in kids:
+                kid_holder.append(self.find_by_id(all_indivs, kid))
+            if len(kid_holder) > 0:
+                first_kid = kid_holder[0]
+            else:
+                continue
+            for each in kid_holder[1:]:
+                if each.name == first_kid.name and each.birthday == first_kid.birthday:
+                    print("Error US25: Child " + first_kid.name + " ("+ first_kid.id+")" +
+                          " and Child " + each.name + " ("+ each.id +") have same Name and Birthday.")
+                    error_kids = [first_kid.id, each.id]
+                    error_kids_all.append(error_kids)
+        return error_kids_all
 
+
+    #US26
+    #Keep Individual and Family lists consistent
+    #Returns: list of error strings
+    def corresp_entries(self):
+        errors= []
+        #build dicts - faster lookup -> own func later
+        indiDict = {}
+        famDict = {}
+        for x in self.individuals:
+            indiDict[x.id] = x
+        for y in self.families:
+            famDict[y.id] = y
+        #check fams for kids and spouses
+        for fam in self.families:
+            for kid in fam.children:
+                #kids
+                if indiDict[kid].child != fam.id:
+                    errStr = "Anomaly US26: " + indiDict[kid].name + " is missing their family tag."
+                    errors.append(errStr);
+                    print(errStr)
+            #spouses
+            if indiDict[fam.husband_id].spouse != fam.id:
+                errStr = "Anomaly US26: " + indiDict[fam.husband_id].name + " is missing his spouse tag."
+                errors.append(errStr);
+                print(errStr)
+            if indiDict[fam.wife_id].spouse != fam.id:
+                errStr = "Anomaly US26: " + indiDict[fam.wife_id].name + " is missing her spouse tag."
+                errors.append(errStr);
+                print(errStr)
+        #check indi for inclusion in their family's data
+        for indi in self.individuals:
+            #spouse
+            if indi.spouse != 'NA':
+                if (indi.id != famDict[indi.spouse].husband_id and indi.id != famDict[indi.spouse].wife_id):
+                    errStr = "Anomaly US26: " + indi.name + " is missing from their family's spouse data."
+                    errors.append(errStr);
+                    print(errStr)
+            #child
+            if indi.child != 'NA':
+                if indi.id not in famDict[indi.child].children:
+                    errStr = "Anomaly US26: " + indi.name + " is missing from their family's children data."
+                    errors.append(errStr);
+                    print(errStr)  
+        return errors
 
 
 
