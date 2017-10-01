@@ -15,6 +15,7 @@ class UserStoryChecker:
         self.marriage_after_14()
         self.marriage_to_descend()
         self.dates_before_today()
+        self.birth_before_marriage()
 
     #can be used by family and individual because both have id property
     def find_by_id(self, object_list, id):
@@ -109,10 +110,25 @@ class UserStoryChecker:
             if (married_date != None):
                 try:
                     if married_date > current_date:
-                        if married_date > current_date:
-                            print("Error US01: {} marriage date is after today; are you a time traveler?".format(f.name))
+                        print("Error US01: {}'s marriage date is after today; are you a time traveler?".format(f.name))
                 except:
                     pass
+
+    #User story 2
+    def birth_before_marriage(self):
+        for i in self.individuals:
+            birthday = i.birthday
+            #Need to create new object to hold family class to sort by values
+            family = self.find_by_id(self.families, i.spouse)
+            if family != None:
+                marriage_date = family.married
+            if marriage_date != None:
+                try:
+                    if birthday >= marriage_date:
+                        print("Error US02: {}'s marriage date is before their date of birth".format(i.name))
+                except:
+                    pass
+            print (marriage_date)
 
 
 
