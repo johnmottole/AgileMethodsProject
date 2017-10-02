@@ -73,14 +73,15 @@ class UserStoryChecker:
         for f in self.families:
             wife = self.find_by_id(self.individuals,f.wife_id)
             husband = self.find_by_id(self.individuals, f.husband_id)
+            marr_day = f.married
             spouses = [wife,husband]
             for spouse in spouses:
                 if (spouse != None):
-                    age = spouse.age
+                    bday = spouse.birthday
                     try:
-                        num_age = float(age)
-                        if (num_age < 14):
-                            print("Anomaly US10:  " + spouse.name + " (" + spouse.id + ") is married but is less than 14 years old")
+                        num_age = float(spouse.age)
+                        if (self.compare_dates(bday,marr_day) < 14*365):
+                            print("Anomaly US10:  " + spouse.name + " (" + spouse.id + ") was less than 14 years old at time of marriage")
                     except:
                         pass
     #user story 1, parents should not marry descendants
