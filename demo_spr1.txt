@@ -1,0 +1,57 @@
++-------+---------------------+--------+-------------+-----+-------+-------------+-------+--------+
+|   ID  |         Name        | Gender |   Birthday  | Age | Alive |    Death    | Child | Spouse |
++-------+---------------------+--------+-------------+-----+-------+-------------+-------+--------+
+|  @I1@ |    John /Mottole/   |   M    | 18 MAY 1996 |  21 |  True |      NA     |  @F1@ |   NA   |
+|  @I2@ |    John /Mottole/   |   M    |  7 MAY 1956 |  61 |  True |      NA     |  @F2@ |  @F6@  |
+|  @I3@ |   Maria /Cutillo/   |   F    |  3 APR 1957 |  60 |  True |      NA     |  @F3@ |  @F1@  |
+|  @I4@ |   Nicole /Mottole/  |   F    | 12 AUG 1998 |  19 |  True |      NA     |  @F1@ |   NA   |
+|  @I5@ |    John /Mottole/   |   M    | 11 DEC 1925 |  91 | False | 15 DEC 1996 |   NA  |  @F2@  |
+|  @I6@ |   Frances /Souza/   |   F    | 20 SEP 1930 |  87 |  True |      NA     |   NA  |  @F2@  |
+|  @I7@ |  Biondino /Cutillo/ |   M    | 25 NOV 1925 |  91 | False |  8 SEP 2006 |   NA  |  @F3@  |
+|  @I8@ | Alfonsina /Rabuano/ |   F    |  5 SEP 1945 |  72 |  True |      NA     |   NA  |  @F3@  |
+|  @I9@ |  Anthony /Cutillo/  |   M    | 20 MAY 1952 |  65 |  True |      NA     |  @F3@ |  @F5@  |
+| @I10@ |  Domenic /Cutillo/  |   M    |  1 JUN 2020 |  -3 |  True |      NA     |  @F3@ |   NA   |
+| @I11@ |  Frances /Mottole/  |   F    | 12 OCT 1954 |  62 |  True |      NA     |  @F2@ |  @F6@  |
+| @I12@ |  Frances /Mottole/  |   F    | 12 OCT 1954 |  62 |  True |      NA     |  @F2@ |  @F7@  |
+| @I13@ |    Dino /Cutillo/   |   M    |  7 JUN 2000 |  17 |  True |      NA     |  @F4@ |   NA   |
+| @I14@ |     Flo /Manna/     |   F    | 11 OCT 1950 |  66 | False |  6 JUN 2000 |   NA  |  @F4@  |
+| @I15@ |   Steven /Cutillo/  |   M    | 19 OCT 2002 |  14 |  True |      NA     |  @F5@ |   NA   |
+| @I16@ |  Rosanne /Stampone/ |   F    | 25 MAY 1951 |  66 |  True |      NA     |   NA  |  @F5@  |
+| @I17@ |  Frances /Ferrell/  |   F    | 14 FEB 1987 |  30 |  True |      NA     |  @F6@ |   NA   |
+| @I18@ |    Gary /Ferrell/   |   M    | 11 JUN 1953 |  64 |  True |      NA     |   NA  |  @F6@  |
+| @I19@ |    Brian /Murphy/   |   M    | 15 JUN 1988 |  29 |  True |      NA     |  @F7@ |  @F8@  |
+| @I20@ |   William /Murphy/  |   M    | 18 SEP 1954 |  63 |  True |      NA     |   NA  |  @F7@  |
+| @I50@ |    Megan /Little/   |   F    | 17 MAY 1989 |  28 |  True |      NA     |  @F7@ |  @F9@  |
++-------+---------------------+--------+-------------+-----+-------+-------------+-------+--------+
++------+-------------+-------------+--------------------+------------+---------------------+---------+----------------------------+
+|  ID  |   Married   |   Divorced  |    Husband Name    | Husband ID |      Wife Name      | Wife ID |          Children          |
++------+-------------+-------------+--------------------+------------+---------------------+---------+----------------------------+
+| @F1@ | 13 MAY 1930 |      NA     |   John /Mottole/   |    @I2@    |   Maria /Cutillo/   |   @I3@  |          ['@I1@']          |
+| @F2@ | 13 APR 1950 |      NA     |   John /Mottole/   |    @I5@    |   Frances /Souza/   |   @I6@  | ['@I2@', '@I11@', '@I12@'] |
+| @F3@ | 20 MAY 1950 |      NA     | Biondino /Cutillo/ |    @I7@    | Alfonsina /Rabuano/ |   @I8@  | ['@I3@', '@I9@', '@I10@']  |
+| @F4@ | 13 MAY 1986 |      NA     | Anthony /Cutillo/  |    @I9@    |     Flo /Manna/     |  @I14@  |         ['@I13@']          |
+| @F5@ |  1 MAY 2020 |      NA     | Anthony /Cutillo/  |    @I9@    |  Rosanne /Stampone/ |  @I16@  |         ['@I15@']          |
+| @F6@ | 13 OCT 1970 |      NA     |   John /Mottole/   |    @I2@    |  Frances /Mottole/  |  @I11@  |         ['@I17@']          |
+| @F7@ | 18 MAY 1986 | 19 MAY 1990 |  William /Murphy/  |   @I20@    |  Frances /Mottole/  |  @I12@  |     ['@I19@', '@I50@']     |
+| @F8@ | 15 SEP 2007 |      NA     |   Brian /Murphy/   |   @I19@    |    Megan /Little/   |  @I50@  |             []             |
+| @F9@ | 17 JAN 2005 |      NA     |  William /Murphy/  |   @I20@    |    Megan /Little/   |  @I50@  |             []             |
++------+-------------+-------------+--------------------+------------+---------------------+---------+----------------------------+
+Error US01: Domenic /Cutillo/ birthday is after today; are you a time traveler?
+Error US01: Anthony /Cutillo/ and Rosanne /Stampone/'s marriage date is after today; are you a time traveler?
+Error US02: Maria /Cutillo/ married before they were born.
+Error US09: Biondino /Cutillo/ (@I7@) died at least 9 months before Domenic /Cutillo/ (@I10@) was born
+Error US09: Dino /Cutillo/ (@I13@) was born after the death of mother Flo /Manna/ (@I14@)
+Anomaly US10:  Maria /Cutillo/ (@I3@) was less than 14 years old at time of marriage
+Anomaly US10:  John /Mottole/ (@I2@) was less than 14 years old at time of marriage
+Anomaly US10:  Alfonsina /Rabuano/ (@I8@) was less than 14 years old at time of marriage
+Error US17: William /Murphy/ (@I20@) is married to a descendant 
+Error US18: John /Mottole/ @I2@ is married to a sibling.
+Error US18: Frances /Mottole/ @I11@ is married to a sibling.
+Error US18: Brian /Murphy/ @I19@ is married to a sibling.
+Error US25: Child Frances /Mottole/ (@I11@) and Child Frances /Mottole/ (@I12@) have same Name and Birthday.
+Anomaly US26: John /Mottole/ is missing his spouse tag.
+Anomaly US26: Anthony /Cutillo/ is missing his spouse tag.
+Anomaly US26: Megan /Little/ is missing her spouse tag.
+Anomaly US26: William /Murphy/ is missing his spouse tag.
+Anomaly US26: Nicole /Mottole/ is missing from their family's children data.
+Anomaly US26: Gary /Ferrell/ is missing from their family's spouse data.
