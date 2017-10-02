@@ -15,6 +15,7 @@ class UserStoryChecker:
         self.marriage_after_14()
         self.marriage_to_descend()
         self.dates_before_today()
+        self.marriage_to_sibling()
 
     #can be used by family and individual because both have id property
     def find_by_id(self, object_list, id):
@@ -69,7 +70,7 @@ class UserStoryChecker:
                             print("Anomaly US10:  " + spouse.name + " (" + spouse.id + ") is married but is less than 14 years old")
                     except:
                         pass
-    
+    #user story 1, parents should not marry descendants
     def marriage_to_descend(self):
         for f in self.families:
             mother = self.find_by_id(self.individuals,f.wife_id)
@@ -81,7 +82,18 @@ class UserStoryChecker:
                     print("Error US17:  " + mother.name + " (" + mother.id + ") is married to a descendant")
                 elif(childSpouse == father):
                     print("Error US17: " + father.name + " (" + father.id + ") is married to a descendant ")
-
+    def marriage_to_sibling(self):
+        for f in self.families:
+            for child in f.children:
+                myChild = self.find_by_id(self.individuals, child)
+                childSpouse = self.find_by_id(self.individuals, myChild.spouse)
+                ##print(childSpouse)
+                for sib in f.children:
+                    print(sib)
+                    if(childSpouse == sib):
+                        print("Error US18: " + myChild.name + "is married to a sibling")
+                        break
+                    
     #User story 1, dates not after current date                
     def dates_before_today(self):
         current_date = date.today()

@@ -11,20 +11,22 @@ UserStoryChecker	../userstories.py	/^class UserStoryChecker:$/;"	kind:class	line
 age	../individual_and_family.py	/^    age = "NA"$/;"	kind:variable	line:20
 age_adder	../main.py	/^def age_adder(birth):$/;"	kind:function	line:130
 alive	../individual_and_family.py	/^    alive = 'True'$/;"	kind:variable	line:21
-birth_before_death_of_parent	../userstories.py	/^    def birth_before_death_of_parent(self):$/;"	kind:member	line:31
+birth_before_death_of_parent	../userstories.py	/^    def birth_before_death_of_parent(self):$/;"	kind:member	line:33
 birthday	../individual_and_family.py	/^    birthday = "NA"$/;"	kind:variable	line:19
 check_all_stories	../userstories.py	/^    def check_all_stories(self, i, f):$/;"	kind:member	line:9
 child	../individual_and_family.py	/^    child = "NA"$/;"	kind:variable	line:23
 children	../individual_and_family.py	/^    children = []$/;"	kind:variable	line:10
-compare_dates	../userstories.py	/^    def compare_dates(self, date1, date2):$/;"	kind:member	line:25
+compare_dates	../userstories.py	/^    def compare_dates(self, date1, date2):$/;"	kind:member	line:27
 create_indiv_objects	../main.py	/^def create_indiv_objects(part_list):$/;"	kind:function	line:33
 date	../main.py	/^from datetime import date$/;"	kind:namespace	line:1
-datetime	../userstories.py	/^from datetime import datetime$/;"	kind:namespace	line:1
+date	../userstories.py	/^from datetime import datetime, date$/;"	kind:namespace	line:1
+dates_before_today	../userstories.py	/^    def dates_before_today(self):$/;"	kind:member	line:86
+datetime	../userstories.py	/^from datetime import datetime, date$/;"	kind:namespace	line:1
 day_adder	../main.py	/^def day_adder(part_list, index):$/;"	kind:function	line:126
 death	../individual_and_family.py	/^    death = "NA"$/;"	kind:variable	line:22
 divorced	../individual_and_family.py	/^    divorced = "NA"$/;"	kind:variable	line:5
 families	../userstories.py	/^    families = []$/;"	kind:variable	line:6
-find_by_id	../userstories.py	/^    def find_by_id(self, object_list, id):$/;"	kind:member	line:18
+find_by_id	../userstories.py	/^    def find_by_id(self, object_list, id):$/;"	kind:member	line:20
 find_indivual_by_id	../main.py	/^def find_indivual_by_id(indiv_list,id):$/;"	kind:function	line:26
 gender	../individual_and_family.py	/^    gender = "NA"$/;"	kind:variable	line:18
 husband_id	../individual_and_family.py	/^    husband_id = "NA"$/;"	kind:variable	line:6
@@ -36,7 +38,8 @@ individuals	../userstories.py	/^    individuals = []$/;"	kind:variable	line:5
 link_indiv_fam	../main.py	/^def link_indiv_fam(individuals, familes):$/;"	kind:function	line:108
 main	../main.py	/^def main():$/;"	kind:function	line:141
 main.py	../main.py	1;"	kind:file	line:1
-marriage_after_14	../userstories.py	/^    def marriage_after_14(self):$/;"	kind:member	line:56
+marriage_after_14	../userstories.py	/^    def marriage_after_14(self):$/;"	kind:member	line:58
+marriage_to_descend	../userstories.py	/^    def marriage_to_descend(self):$/;"	kind:member	line:73
 married	../individual_and_family.py	/^    married = "NA"$/;"	kind:variable	line:4
 name	../individual_and_family.py	/^    name = "NA"$/;"	kind:variable	line:17
 readFile	../main.py	/^def readFile():$/;"	kind:function	line:6
