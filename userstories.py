@@ -9,25 +9,22 @@ class UserStoryChecker:
     def check_all_stories(self, i, f):
         self.individuals = i
         self.families = f
-        #User story 9
-        self.birth_before_death_of_parent()
-        #User Story 10
-        self.marriage_after_14()
-        #US17
-        self.marriage_to_descend()
-        #US18
-        
         #US01
-        self.dates_before_today()
-
-        self.marriage_to_sibling()
-
+        #self.dates_before_today()
         #US02
-        self.birth_before_marriage()
+        #self.birth_before_marriage()
+        #User story 9
+        #self.birth_before_death_of_parent()
+        #User Story 10
+        #self.marriage_after_14()
+        #US17
+        #self.marriage_to_descend()
+        #US18
+        #self.marriage_to_sibling()
         #US25
         self.unique_first_names()
         #US26
-        self.corresp_entries()
+        #self.corresp_entries()
 
 
     #can be used by family and individual because both have id property
@@ -156,7 +153,7 @@ class UserStoryChecker:
                 if marriage_date != None:
                     try:
                         if self.compare_dates(birthday, marriage_date) < 0:
-                            print("Error US02: {} is married is before they were born.".format(i.name))
+                            print("Error US02: {} married before they were born.".format(i.name))
                     except:
                         pass
 
@@ -164,32 +161,19 @@ class UserStoryChecker:
     #no more than one child with same name and birth date in fam
     #returns list of lists of duplicates
     def unique_first_names(self):
-        error = ''
-        all_indivs = self.individuals
-        #this holds all dupe kids
-        error_kids_all = []
+        errors = []
         for fam in self.families:
-            #this is a temp container for kids in each family
-            kid_holder = []
-            kids = fam.children
-            for kid in kids:
-                kid_holder.append(self.find_by_id(all_indivs, kid))
-            if len(kid_holder) < 0:
-                continue
-            for each in kid_holder:
-                if error == each.id:
-                        continue
-                for other in kid_holder:
-                    if (each.name == other.name and each.birthday == other.birthday and each.id != other.id):
-                        print("Error US25: Child " + other.name + " ("+ other.id+")" +
-                              " and Child " + each.name + " ("+ each.id +") have same Name and Birthday.")
-                        error_kids = [other.id, each.id]
-                        error = other.id
-                        error_kids_all.append(error_kids)
-                        break
-        return error_kids_all
-
-
+            if len(fam.children) > 1:
+                for index, kiddo in enumerate(fam.children):
+                    kid = self.find_by_id(self.individuals, kiddo)
+                    for kiddo_comp in fam.children[index:]:
+                        kid_comp = self.find_by_id(self.individuals, kiddo_comp)
+                        if kid.name == kid_comp.name and kid.birthday == kid_comp.birthday and kid.id != kid_comp.id:
+                            print("Error US25: Child " + kid.name + " ("+ kid.id+")" +
+                              " and Child " + kid_comp.name + " ("+ kid_comp.id +") have same Name and Birthday.")
+                            errors.append([kid.id, kid_comp.id])
+        return errors
+    
     #US26
     #Keep Individual and Family lists consistent
     #Returns: list of error strings
