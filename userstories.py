@@ -114,59 +114,62 @@ class UserStoryChecker:
             individual_birthday = self.find_by_id(self.individuals, i.birthday)
             individual_death = self.find_by_id(self.individuals, i.death)
             try:
-                if individual_birthday > current_date:
+                if self.compare_dates(individual_birthday, current_date) > 0:
                     print("Error US01: {} birthday is after today; are you a time traveler?".format(i.name))
-                if individual_death > current_date:
-                    print("Error US01: {} date of death is after today; are you a time traveler?".format(i.name))
             except:
                 pass
+            if individual_death != None:
+                try:
+                    if self.compare_dates(individual_death, current_date) > 0:
+                        print("Error US01: {} date of death is after today; are you a time traveler?".format(i.name))
+                except:
+                    pass
         #Need to check for existence of dates first before try except        
         for f in self.families:
             divorce_date = self.find_by_id(self.individuals, f.divorced)
             married_date = self.find_by_id(self.individuals, f.married)
             if (divorce_date != None):
                 try:
-                    if divorce_date > current_date:
+                    if self.compare_dates(divorce_date > current_date) > 0:
                         print("Error US01: {} divorce date is after today; are you a time traveler?".format(f.name))
                 except:
                     pass
                 
             if (married_date != None):
                 try:
-                    if married_date > current_date:
+                    if self.compare_dates(married_date > current_date) > 0:
                         print("Error US01: {}'s marriage date is after today; are you a time traveler?".format(f.name))
                 except:
                     pass
 
     #User story 2
     def birth_before_marriage(self):
-        #dictionaries for easies
-        indiDict = {}
-        famDict = {}
-        for x in self.individuals:
-            indiDict[x.id] = x
-        for y in self.families:
-            famDict[y.id] = y
+##        #dictionaries for easies
+##        indiDict = {}
+##        famDict = {}
+##        for x in self.individuals:
+##            indiDict[x.id] = x
+##        for y in self.families:
+##            famDict[y.id] = y
+##        for i in self.individuals:
+##            if i.spouse != 'NA':
+##                marr_date = famDict[i.spouse].married
+##                bir_date = i.birthday
+##                if self.compare_dates(marr_date, bir_date) > 0:
+##                    print("Error US02: " + i.name + " married before born.")
+        
         for i in self.individuals:
-            if i.spouse != 'NA':
-                marr_date = famDict[i.spouse].married
-                bir_date = i.birthday
-                if self.compare_dates(marr_date, bir_date) > 0:
-                    print("Error US02: " + i.name + " married before born.")
-                            
-            
-##            birthday = i.birthday
-##            #Need to create new object to hold family class to sort by values
-##            family = self.find_by_id(self.families, i.spouse)
-##            if family != None:
-##                marriage_date = family.married
-##            if marriage_date != None:
-##                try:
-##                    if birthday >= marriage_date:
-##                        print("Error US02: {}'s marriage date is before their date of birth".format(i.name))
-##                except:
-##                    pass
-##            print (marriage_date)
+            birthday = i.birthday
+            #Need to create new object to hold family class to sort by values
+            family = self.find_by_id(self.families, i.spouse)
+            if family != None:
+                marriage_date = family.married
+                if marriage_date != None:
+                    try:
+                        if compare_dates(birthday, marriage_date) > 0:
+                            print("Error US02: {} is married is before they were born.".format(i.name))
+                    except:
+                        pass
 
     #User story 25
     #no more than one child with same name and birth date in fam
