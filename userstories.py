@@ -10,21 +10,21 @@ class UserStoryChecker:
         self.individuals = i
         self.families = f
         #US01
-        #self.dates_before_today()
+        self.dates_before_today()
         #US02
-        #self.birth_before_marriage()
+        self.birth_before_marriage()
         #User story 9
-        #self.birth_before_death_of_parent()
+        self.birth_before_death_of_parent()
         #User Story 10
-        #self.marriage_after_14()
+        self.marriage_after_14()
         #US17
-        #self.marriage_to_descend()
+        self.marriage_to_descend()
         #US18
-        #self.marriage_to_sibling()
+        self.marriage_to_sibling()
         #US25
         self.unique_first_names()
         #US26
-        #self.corresp_entries()
+        self.corresp_entries()
 
 
     #can be used by family and individual because both have id property
@@ -81,29 +81,52 @@ class UserStoryChecker:
                             print("Anomaly US10:  " + spouse.name + " (" + spouse.id + ") was less than 14 years old at time of marriage")
                     except:
                         pass
-    #user story 1, parents should not marry descendants
+    #user story 17, parents should not marry descendants
     def marriage_to_descend(self):
         for f in self.families:
-            mother = self.find_by_id(self.individuals,f.wife_id)
-            father= self.find_by_id(self.individuals, f.husband_id)
+            mother = f.wife_id
+            father= f.husband_id
             for child in f.children:
+                #RL-- edited because was checking fam tags against indi tags
+                #now actually checks for marriage to children
                 myChild = self.find_by_id(self.individuals, child)
-                childSpouse = self.find_by_id(self.individuals, myChild.spouse)
+                if myChild.spouse == 'NA':
+                    continue
+                their_fam = self.find_by_id(self.families, myChild.spouse)
+                if myChild.gender == 'M':
+                    childSpouse = their_fam.wife_id
+                if myChild.gender == 'F':
+                    childSpouse = their_fam.husband_id
                 if(childSpouse == mother):
-                    print("Error US17:  " + mother.name + " (" + mother.id + ") is married to a descendant")
-                elif(childSpouse == father):
-                    print("Error US17: " + father.name + " (" + father.id + ") is married to a descendant ")
+                    mom = self.find_by_id(self.individuals, mother)
+                    print("Error US17:  " + mom.name + " (" + mom.id + ") is married to a descendant")
+                if(childSpouse == father):
+                    dad = self.find_by_id(self.individuals, father)
+                    print("Error US17: " + dad.name + " (" + dad.id + ") is married to a descendant ")
+                    
+    # US18 no marriage to siblings
     def marriage_to_sibling(self):
-        for f in self.families:
-            for child in f.children:
-                myChild = self.find_by_id(self.individuals, child)
-                childSpouse = self.find_by_id(self.individuals, myChild.spouse)
-                ##print(childSpouse)
-                for sib in f.children:
-                    ##print(sib)
-                    if(childSpouse == sib):
-                        print("Error US18: " + myChild.name + "is married to a sibling")
-                        break
+        for ind in self.individuals:
+            if ind.spouse != 'NA':
+                if ind.child == 'NA':
+                    continue
+                the_fam_s = self.find_by_id(self.families, ind.spouse)
+                the_fam_c = self.find_by_id(self.families, ind.child)
+                if ind.gender == 'M':
+                    if the_fam_s.wife_id in the_fam_c.children:
+                        print("Error US18: " + ind.name + " " + ind.id + " is married to a sibling.")
+                if ind.gender == 'F':
+                    if the_fam_s.husband_id in the_fam_c.children:
+                        print("Error US18: " + ind.name + " " + ind.id + " is married to a sibling.")
+        
+##        for f in self.families:
+##            for child in f.children:
+##                myChild = self.find_by_id(self.individuals, child)
+##                childSpouse = self.find_by_id(self.individuals, myChild.spouse)
+##                for sib in f.children:
+##                    if(childSpouse == sib):
+##                        print("Error US18: " + myChild.name + "is married to a sibling")
+##                        break
                     
     #User story 1, dates not after current date                
     def dates_before_today(self):
