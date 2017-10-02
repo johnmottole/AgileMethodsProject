@@ -109,54 +109,42 @@ class UserStoryChecker:
                     
     #User story 1, dates not after current date                
     def dates_before_today(self):
-        current_date = date.today()
+        current_date = date.today().strftime('%d %b %Y')
+
         for i in self.individuals:
-            individual_birthday = self.find_by_id(self.individuals, i.birthday)
-            individual_death = self.find_by_id(self.individuals, i.death)
+            individual_birthday = i.birthday
+            individual_death = i.death
             try:
-                if self.compare_dates(individual_birthday, current_date) > 0:
+                if self.compare_dates(current_date, individual_birthday) > 0:
                     print("Error US01: {} birthday is after today; are you a time traveler?".format(i.name))
             except:
                 pass
-            if individual_death != None:
+            if (individual_death != None):
                 try:
-                    if self.compare_dates(individual_death, current_date) > 0:
+                    if self.compare_dates(current_date, individual_death) > 0:
                         print("Error US01: {} date of death is after today; are you a time traveler?".format(i.name))
                 except:
                     pass
         #Need to check for existence of dates first before try except        
         for f in self.families:
-            divorce_date = self.find_by_id(self.individuals, f.divorced)
-            married_date = self.find_by_id(self.individuals, f.married)
+            divorce_date = f.divorced
+            married_date = f.married
             if (divorce_date != None):
                 try:
-                    if self.compare_dates(divorce_date > current_date) > 0:
-                        print("Error US01: {} divorce date is after today; are you a time traveler?".format(f.name))
+                    if self.compare_dates(current_date, divorce_date) > 0:
+                        print("Error US01: {} and {}'s- divorce date is after today; are you a time traveler?".format(f.husband_name, f.wife_name))
                 except:
                     pass
                 
-            if (married_date != None):
+            if married_date != None:
                 try:
-                    if self.compare_dates(married_date > current_date) > 0:
-                        print("Error US01: {}'s marriage date is after today; are you a time traveler?".format(f.name))
+                    if self.compare_dates(current_date, married_date) > 0:
+                        print("Error US01: {} and {}'s marriage date is after today; are you a time traveler?".format(f.husband_name, f.wife_name))
                 except:
                     pass
 
     #User story 2
     def birth_before_marriage(self):
-##        #dictionaries for easies
-##        indiDict = {}
-##        famDict = {}
-##        for x in self.individuals:
-##            indiDict[x.id] = x
-##        for y in self.families:
-##            famDict[y.id] = y
-##        for i in self.individuals:
-##            if i.spouse != 'NA':
-##                marr_date = famDict[i.spouse].married
-##                bir_date = i.birthday
-##                if self.compare_dates(marr_date, bir_date) > 0:
-##                    print("Error US02: " + i.name + " married before born.")
         
         for i in self.individuals:
             birthday = i.birthday
@@ -166,7 +154,7 @@ class UserStoryChecker:
                 marriage_date = family.married
                 if marriage_date != None:
                     try:
-                        if compare_dates(birthday, marriage_date) > 0:
+                        if self.compare_dates(birthday, marriage_date) < 0:
                             print("Error US02: {} is married is before they were born.".format(i.name))
                     except:
                         pass

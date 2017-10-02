@@ -171,7 +171,7 @@ def main():
         k += 1
     print(y)
 
-
+    
     #Have User story checker perform all checks on data
     checker = UserStoryChecker()
     checker.check_all_stories(individuals,families)
