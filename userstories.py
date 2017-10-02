@@ -143,19 +143,15 @@ class UserStoryChecker:
         #dictionaries for easies
         indiDict = {}
         famDict = {}
-        months = {'JAN' : 1, 'FEB' : 2, 'MAR' : 3,
-              'APR' : 4, 'MAY' : 5, 'JUN' : 6,
-              'JUL' : 7, 'AUG' : 8, 'SEP' : 9,
-              'OCT' : 10, 'NOV' : 11, 'DEC' : 12 }
         for x in self.individuals:
             indiDict[x.id] = x
         for y in self.families:
             famDict[y.id] = y
         for i in self.individuals:
             if i.spouse != 'NA':
-                marr_date = famDict[i.spouse].married#.split()
-                bir_date = i.birthday#.split()
-                if self.compare_dates(marr_date, bir_date) > 0:#int(marr_date[2]) <= int(bir_date[2]):
+                marr_date = famDict[i.spouse].married
+                bir_date = i.birthday
+                if self.compare_dates(marr_date, bir_date) > 0:
                     print("Error US02: " + i.name + " married before born.")
                             
             
