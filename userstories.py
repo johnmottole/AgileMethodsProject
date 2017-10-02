@@ -73,14 +73,15 @@ class UserStoryChecker:
         for f in self.families:
             wife = self.find_by_id(self.individuals,f.wife_id)
             husband = self.find_by_id(self.individuals, f.husband_id)
+            marr_day = f.married
             spouses = [wife,husband]
             for spouse in spouses:
                 if (spouse != None):
-                    age = spouse.age
+                    bday = spouse.birthday
                     try:
-                        num_age = float(age)
-                        if (num_age < 14):
-                            print("Anomaly US10:  " + spouse.name + " (" + spouse.id + ") is married but is less than 14 years old")
+                        num_age = float(spouse.age)
+                        if (self.compare_dates(bday,marr_day) < 14*365):
+                            print("Anomaly US10:  " + spouse.name + " (" + spouse.id + ") was less than 14 years old at time of marriage")
                     except:
                         pass
     #user story 1, parents should not marry descendants
@@ -163,6 +164,7 @@ class UserStoryChecker:
     #no more than one child with same name and birth date in fam
     #returns list of lists of duplicates
     def unique_first_names(self):
+        error = ''
         all_indivs = self.individuals
         #this holds all dupe kids
         error_kids_all = []
@@ -172,16 +174,19 @@ class UserStoryChecker:
             kids = fam.children
             for kid in kids:
                 kid_holder.append(self.find_by_id(all_indivs, kid))
-            if len(kid_holder) > 0:
-                first_kid = kid_holder[0]
-            else:
+            if len(kid_holder) < 0:
                 continue
-            for each in kid_holder[1:]:
-                if each.name == first_kid.name and each.birthday == first_kid.birthday:
-                    print("Error US25: Child " + first_kid.name + " ("+ first_kid.id+")" +
-                          " and Child " + each.name + " ("+ each.id +") have same Name and Birthday.")
-                    error_kids = [first_kid.id, each.id]
-                    error_kids_all.append(error_kids)
+            for each in kid_holder:
+                if error == each.id:
+                        continue
+                for other in kid_holder:
+                    if (each.name == other.name and each.birthday == other.birthday and each.id != other.id):
+                        print("Error US25: Child " + other.name + " ("+ other.id+")" +
+                              " and Child " + each.name + " ("+ each.id +") have same Name and Birthday.")
+                        error_kids = [other.id, each.id]
+                        error = other.id
+                        error_kids_all.append(error_kids)
+                        break
         return error_kids_all
 
 
