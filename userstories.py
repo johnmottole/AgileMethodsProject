@@ -176,6 +176,7 @@ class UserStoryChecker:
     #no more than one child with same name and birth date in fam
     #returns list of lists of duplicates
     def unique_first_names(self):
+        error = ''
         all_indivs = self.individuals
         #this holds all dupe kids
         error_kids_all = []
@@ -185,16 +186,19 @@ class UserStoryChecker:
             kids = fam.children
             for kid in kids:
                 kid_holder.append(self.find_by_id(all_indivs, kid))
-            if len(kid_holder) > 0:
-                first_kid = kid_holder[0]
-            else:
+            if len(kid_holder) < 0:
                 continue
-            for each in kid_holder[1:]:
-                if each.name == first_kid.name and each.birthday == first_kid.birthday:
-                    print("Error US25: Child " + first_kid.name + " ("+ first_kid.id+")" +
-                          " and Child " + each.name + " ("+ each.id +") have same Name and Birthday.")
-                    error_kids = [first_kid.id, each.id]
-                    error_kids_all.append(error_kids)
+            for each in kid_holder:
+                if error == each.id:
+                        continue
+                for other in kid_holder:
+                    if (each.name == other.name and each.birthday == other.birthday and each.id != other.id):
+                        print("Error US25: Child " + other.name + " ("+ other.id+")" +
+                              " and Child " + each.name + " ("+ each.id +") have same Name and Birthday.")
+                        error_kids = [other.id, each.id]
+                        error = other.id
+                        error_kids_all.append(error_kids)
+                        break
         return error_kids_all
 
 
