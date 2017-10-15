@@ -242,7 +242,7 @@ class Test(unittest.TestCase):
         storyChecker.individuals = [ind1,ind2,ind3]
         storyChecker.families = [fam1,fam2]
         bigamy_list = storyChecker.no_bigamy()
-        self.assertEquals(bigamy_list,[ind3.id])
+        self.assertEqual(bigamy_list,[ind3.id])
     def test_parents_too_old(self):
         ind1 = Individual()
         ind1.name = "Husband"
@@ -274,7 +274,24 @@ class Test(unittest.TestCase):
         self.assertIn("Error US12: " + ind4.name + "(" + ind4.id + ") is more than 60 years younger than mother",error_list)
         self.assertIn("Error US12: " + ind4.name + "(" + ind4.id + ") is more than 80 years younger than father",error_list)
 
-
+    def test_marriage_before_divorce(self):
+        f = Family()
+        f.married = "8 AUG 1950"
+        f.divorced = "8 AUG 1949"
+        story_checker = UserStoryChecker()
+        story_checker.families = [f]
+        marriage_before_divorce = story_checker.marriage_before_divorce()
+        #Lists if errors pop out and aren't caught
+        self.assertEqual(marriage_before_divorce, None)
+        
+    def test_birthday_before_death(self):
+        i = Individual()
+        i.birthday = "8 AUG 1950"
+        i.death = "8 AUG 1949"
+        story_checker = UserStoryChecker()
+        birth_before_death = story_checker.birth_before_death()
+        #Lists if errors pop out and aren't caught
+        self.assertEqual(birth_before_death, None) 
 
 
 if __name__ == '__main__':
