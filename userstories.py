@@ -1,5 +1,6 @@
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
+from operator import itemgetter, attrgetter
 
 class UserStoryChecker:
     individuals = []
@@ -33,6 +34,9 @@ class UserStoryChecker:
         self.unique_first_names()
         #US26
         self.corresp_entries()
+        #US27 and US28 defined in main.py, because they must
+        #run whenever individuals and families are put together
+        print("US27 and US28 can be seen in individual and family summaries.")
 
 
     #can be used by family and individual because both have id property
@@ -320,6 +324,39 @@ class UserStoryChecker:
                     print(errStr)  
         return errors
 
+    #US27
+    def age_adder(self, indiv):
+        birth = indiv.birthday
+        months = {'JAN': 1, 'FEB': 2, 'MAR': 3,
+                  'APR': 4, 'MAY': 5, 'JUN': 6,
+                  'JUL': 7, 'AUG': 8, 'SEP': 9,
+                  'OCT': 10, 'NOV': 11, 'DEC': 12}
+        if (indiv.death == "NA"):
+            birth_list = birth.split(' ')
+            b_date = date(int(birth_list[2]), months[birth_list[1]], int(birth_list[0]))
+            c_date = date.today()
+            return str(c_date.year - b_date.year - ((c_date.month, c_date.day) < (b_date.month, b_date.day)))
+        if (indiv.death != "NA"):
+            birth_list = birth.split(' ')
+            death_list = indiv.death.split(' ')
+            b_date = date(int(birth_list[2]), months[birth_list[1]], int(birth_list[0]))
+            c_date = date(int(death_list[2]), months[death_list[1]], int(death_list[0]))
+            return str(c_date.year - b_date.year - ((c_date.month, c_date.day) < (b_date.month, b_date.day)))
+    #US28
+    # US28 -- order siblings by age when listing families
+    def order_sibs(self, fam, indivs):
+        ret_lst = []
+        if (len(fam.children) > 1):
+            tmp = []
+            for chil in fam.children:
+                tmp.append(self.find_by_id(indivs, chil))
+            tmp.sort(key=lambda x: x.age, reverse=True)
+            for child in tmp:
+                ret_lst.append(child.id)
+            print(ret_lst)
+            return ret_lst
+        else:
+            return fam.children
 
 
 
