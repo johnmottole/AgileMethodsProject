@@ -99,6 +99,7 @@ class UserStoryChecker:
                         pass
     #User Story 11
     def no_bigamy(self):
+        indiv_with_bigamy = []
         for indiv in self.individuals:
             current_spouses = []
             indiv_id = indiv.id
@@ -115,6 +116,8 @@ class UserStoryChecker:
                     else:
                         spouses += current_spouses[i] + ","
                 print("Anomaly US11: " + indiv.name + "(" + indiv_id + ") is married to " + spouses)
+                indiv_with_bigamy += [indiv.id]
+        return indiv_with_bigamy
 
     #helper method for US11
     def marr_ended(self,fam):
@@ -128,6 +131,7 @@ class UserStoryChecker:
 
     #User Story 12
     def parents_to_old(self):
+        error_messages = []
         for f in self.families:
             wife = self.find_by_id(self.individuals, f.wife_id)
             husband = self.find_by_id(self.individuals, f.husband_id)
@@ -136,12 +140,16 @@ class UserStoryChecker:
             for child in f.children:
                 child = self.find_by_id(self.individuals,child)
                 child_bday = child.birthday
+                print(child_bday)
                 diff_mother = self.compare_dates(wife_bday, child_bday) / 365
                 diff_father = self.compare_dates(husband_bday, child_bday) / 365
                 if (diff_mother > 60):
                     print("Error US12: " + child.name + "(" + child.id + ") is more than 60 years younger than mother")
+                    error_messages += ["Error US12: " + child.name + "(" + child.id + ") is more than 60 years younger than mother"]
                 if (diff_father > 80):
                     print("Error US12: " + child.name + "(" + child.id + ") is more than 80 years younger than father")
+                    error_messages += ["Error US12: " + child.name + "(" + child.id + ") is more than 80 years younger than father"]
+        return error_messages
 
 
     #user story 17, parents should not marry descendants
@@ -276,7 +284,7 @@ class UserStoryChecker:
                 cousins_list = cousins_list + dad_sibs
         ##print("IND IS: " + ind.id)
         ##print("IND SPOUSE IS: " + ind.spouse)
-        print(cousins_list)
+        #print(cousins_list)
 
         return cousins_list
             
@@ -455,7 +463,7 @@ class UserStoryChecker:
             tmp.sort(key=lambda x: x.age, reverse=True)
             for child in tmp:
                 ret_lst.append(child.id)
-            print(ret_lst)
+            #print(ret_lst)
             return ret_lst
         else:
             return fam.children
