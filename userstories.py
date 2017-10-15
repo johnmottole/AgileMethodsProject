@@ -21,6 +21,10 @@ class UserStoryChecker:
         self.birth_before_death_of_parent()
         #User Story 10
         self.marriage_after_14()
+        #User Story 11
+        self.no_bigamy()
+        #User Story 12
+        self.parents_to_old()
         #US17
         self.marriage_to_descend()
         #US18
@@ -85,6 +89,53 @@ class UserStoryChecker:
                             print("Anomaly US10:  " + spouse.name + " (" + spouse.id + ") was less than 14 years old at time of marriage")
                     except:
                         pass
+    #User Story 11
+    def no_bigamy(self):
+        for indiv in self.individuals:
+            current_spouses = []
+            indiv_id = indiv.id
+            for f in self.families:
+                if f.wife_id == indiv_id and self.marr_ended(f) == False:
+                    current_spouses += [f.husband_name + " (" + f.husband_id + ")"]
+                elif f.husband_id == indiv_id and self.marr_ended(f):
+                    current_spouses += [f.wife_name + " (" + f.wife_id + ")"]
+            if len(current_spouses) > 1:
+                spouses = ""
+                for i in range(0,len(current_spouses)):
+                    if i == len(current_spouses)-1:
+                        spouses += " and " + current_spouses[i]
+                    else:
+                        spouses += current_spouses[i] + ","
+                print("Anomaly US11: " + indiv.name + "(" + indiv_id + ") is married to " + spouses)
+
+    #helper method for US11
+    def marr_ended(self,fam):
+        if fam.divorced != "NA":
+            return True
+        husband = self.find_by_id(self.individuals, fam.husband_id)
+        wife = self.find_by_id(self.individuals, fam.wife_id)
+        if wife.alive == 'False' or husband.alive == 'False':
+            return True
+        return False
+
+    #User Story 12
+    def parents_to_old(self):
+        for f in self.families:
+            wife = self.find_by_id(self.individuals, f.wife_id)
+            husband = self.find_by_id(self.individuals, f.husband_id)
+            wife_bday = wife.birthday
+            husband_bday = husband.birthday
+            for child in f.children:
+                child = self.find_by_id(self.individuals,child)
+                child_bday = child.birthday
+                diff_mother = self.compare_dates(wife_bday, child_bday) / 365
+                diff_father = self.compare_dates(husband_bday, child_bday) / 365
+                if (diff_mother > 60):
+                    print("Error US12: " + child.name + "(" + child.id + ") is more than 60 years younger than mother")
+                if (diff_father > 80):
+                    print("Error US12: " + child.name + "(" + child.id + ") is more than 80 years younger than father")
+
+
     #user story 17, parents should not marry descendants
     def marriage_to_descend(self):
         for f in self.families:
