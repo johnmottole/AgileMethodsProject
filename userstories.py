@@ -35,7 +35,7 @@ class UserStoryChecker:
         #US26
         self.corresp_entries()
         #US19
-        self.first_cousins()
+        ##self.first_cousins()
         #US20
         self.aunts_uncles()
         #US27 and US28 defined in main.py, because they must
@@ -190,11 +190,22 @@ class UserStoryChecker:
             cousins_list = self.get_relatives(ind, "cousin")
             if(not cousins_list):
                 continue
-            print("COUSINS ARE: ")
-            print(cousins_list)
-            for cousin in cousins_list:
-                if(ind.spouse == cousin):
-                    print("Error US19: " + ind.name + " " + ind.id + " is married to a first cousin")
+            ##print("COUSINS ARE: ")
+            ##print(cousins_list)
+            for f in self.families:
+                husb = f.husband_id
+                wife = f.wife_id
+                if(ind.gender == 'M'):
+                    if(ind.id == husb):
+                        for person in cousins_list:
+                            if(wife == person):
+                                print("Error US19: " + ind.name + " " + ind.id + " is married to a first cousin")
+                if(ind.gender == 'F'):
+                    if(ind.id == wife):
+                        for person in cousins_list:
+                            if(husb == person):
+                                print("Error US19: " + ind.name + " " + ind.id + " is married to a first cousin")
+                    
 
     def aunts_uncles(self):
         for ind in self.individuals:
@@ -203,11 +214,21 @@ class UserStoryChecker:
             aunts_and_uncles = self.get_relatives(ind, "aunt")
             if(not aunts_and_uncles):
                 continue
-            print("AUNTS AND UNCLES ARE: ")
-            print(aunts_and_uncles)
-            for person in aunts_and_uncles:
-                if(ind.spouse == person):
-                    print("Error US20: " + ind.name + " " + ind.id + " is married to a niece or nephew")
+            ##print("AUNTS AND UNCLES ARE: ")
+            ##print(aunts_and_uncles)
+            for f in self.families:
+                husb = f.husband_id
+                wife = f.wife_id
+                if(ind.gender == 'M'):
+                    if(ind.id == husb):
+                        for person in aunts_and_uncles:
+                            if(wife == person):
+                                print("Error US20: " + ind.name + " " + ind.id + " is married to a niece")
+                if(ind.gender == 'F'):
+                    if(ind.id == wife):
+                        for person in aunts_and_uncles:
+                            if(husb == person):
+                                print("Error US20: " + ind.name + " " + ind.id + " is married to a nephew")
 
     ##gets different levels of relatives
     ##pass parameter "cousin" to get first cousins
@@ -253,7 +274,10 @@ class UserStoryChecker:
                 cousins_list = cousins_list + mom_sibs
             if(dad_sibs):
                 cousins_list = cousins_list + dad_sibs
-        ##print(cousins_list)
+        ##print("IND IS: " + ind.id)
+        ##print("IND SPOUSE IS: " + ind.spouse)
+        print(cousins_list)
+
         return cousins_list
             
 ##        for f in self.families:
