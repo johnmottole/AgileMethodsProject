@@ -2,6 +2,7 @@ from datetime import date
 from prettytable import PrettyTable
 from individual_and_family import *
 from userstories import *
+from operator import itemgetter, attrgetter
 
 def readFile():
     #open file
@@ -23,7 +24,7 @@ def readFile():
     return partList
 
 
-def find_indivual_by_id(indiv_list,id):
+def find_individual_by_id(indiv_list,id):
     for i in indiv_list:
         if i.id == id:
             return i
@@ -95,13 +96,18 @@ def create_indiv_objects(part_list):
         if (len(parts) == 2):
             if(parts[1] == 'BIRT'):
                 current_indiv.birthday = day_adder(part_list, index)
-                current_indiv.age = age_adder(current_indiv.birthday)
+                #current_indiv.age = age_adder(current_indiv)
             if (parts[1] == 'MARR'):
                 current_fam.married = day_adder(part_list,index)
             if (parts[1] == 'DIV'):
                 current_fam.divorced = day_adder(part_list,index)
-
-
+    #calls to US27 and 28
+    #doing this here to account for the fact that people shouldn't
+    #"age" after they have died
+    for indi in individuals:
+        indi.age = age_adder(indi)
+    for famy in families:
+        famy.children = order_sibs(famy, individuals)
 
     #Return individual list and family list
     return (individuals, families)
@@ -110,18 +116,18 @@ def create_indiv_objects(part_list):
 #RL commenting some of this out to allow errors through for US26
 def link_indiv_fam(individuals, familes):
     for f in familes:
-        husband = find_indivual_by_id(individuals,f.husband_id)
+        husband = find_individual_by_id(individuals,f.husband_id)
         if (husband != None):
             f.husband_name = husband.name
             #husband.spouse = f.id
 
-        wife = find_indivual_by_id(individuals, f.wife_id)
+        wife = find_individual_by_id(individuals, f.wife_id)
         if (wife != None):
             f.wife_name = wife.name
             #wife.spouse = f.id
 
 ##        for child in f.children:
-##            child_obj = find_indivual_by_id(individuals, child)
+##            child_obj = find_individual_by_id(individuals, child)
 ##            if (child_obj != None):
 ##                child_obj.child = f.id
 
@@ -129,16 +135,40 @@ def link_indiv_fam(individuals, familes):
 def day_adder(part_list, index):
     return part_list[index + 1][2];
 
-#RL -- calculates age 
-def age_adder(birth):
+#RL -- calculates age
+#US27 -- Include person's current age when listing individuals
+def age_adder(indiv):
+    birth = indiv.birthday
     months = {'JAN' : 1, 'FEB' : 2, 'MAR' : 3,
               'APR' : 4, 'MAY' : 5, 'JUN' : 6,
               'JUL' : 7, 'AUG' : 8, 'SEP' : 9,
               'OCT' : 10, 'NOV' : 11, 'DEC' : 12 }
-    birth_list = birth.split(' ');
-    b_date = date(int(birth_list[2]), months[birth_list[1]], int(birth_list[0]) )
-    c_date = date.today()
-    return str(c_date.year - b_date.year -((c_date.month, c_date.day) < (b_date.month, b_date.day)))
+    if(indiv.death == "NA"):
+        birth_list = birth.split(' ')
+        b_date = date(int(birth_list[2]), months[birth_list[1]], int(birth_list[0]) )
+        c_date = date.today()
+        return str(c_date.year - b_date.year -((c_date.month, c_date.day) < (b_date.month, b_date.day)))
+    if(indiv.death != "NA"):
+        birth_list = birth.split(' ')
+        death_list = indiv.death.split(' ')
+        b_date = date(int(birth_list[2]), months[birth_list[1]], int(birth_list[0]))
+        c_date = date(int(death_list[2]), months[death_list[1]], int(death_list[0]))
+        return str(c_date.year - b_date.year - ((c_date.month, c_date.day) < (b_date.month, b_date.day)))
+
+#US28 -- order siblings by age when listing families
+def order_sibs(fam, indivs):
+    ret_lst = []
+    if (len(fam.children) > 1):
+        tmp = []
+        for chil in fam.children:
+            tmp.append(find_individual_by_id(indivs, chil))
+        tmp.sort(key=lambda x: x.age, reverse=True)
+        for child in tmp:
+            ret_lst.append(child.id)
+        print(ret_lst)
+        return ret_lst
+    else:
+        return fam.children
 
 
 def main():
