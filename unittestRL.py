@@ -209,6 +209,14 @@ class Test(unittest.TestCase):
         child_three.age = story_checker.age_adder(child_three)
         # test
         self.assertTrue(child_one.age == '20')
+    ##Just going to assert true so I don't have to make a whole chain of families, using the edited GEDCOM file instead
+    def test_aunts_uncles(self):
+        story_checker = UserStoryChecker()
+        self.assertTrue(story_checker.aunts_uncles())
+    def test_first_cousins(self):
+        story_checker = UserStoryChecker()
+        self.assertTrue(story_checker.first_cousins())
+
 
     def test_bigamy(self):
         ind1 = Individual()

@@ -208,11 +208,13 @@ class UserStoryChecker:
                         for person in cousins_list:
                             if(wife == person):
                                 print("Error US19: " + ind.name + " " + ind.id + " is married to a first cousin")
+                                return True 
                 if(ind.gender == 'F'):
                     if(ind.id == wife):
                         for person in cousins_list:
                             if(husb == person):
                                 print("Error US19: " + ind.name + " " + ind.id + " is married to a first cousin")
+                                return True
                     
 
     def aunts_uncles(self):
@@ -232,11 +234,13 @@ class UserStoryChecker:
                         for person in aunts_and_uncles:
                             if(wife == person):
                                 print("Error US20: " + ind.name + " " + ind.id + " is married to a niece")
+                                return True
                 if(ind.gender == 'F'):
                     if(ind.id == wife):
                         for person in aunts_and_uncles:
                             if(husb == person):
                                 print("Error US20: " + ind.name + " " + ind.id + " is married to a nephew")
+                                return True
 
     ##gets different levels of relatives
     ##pass parameter "cousin" to get first cousins
