@@ -289,6 +289,7 @@ class Test(unittest.TestCase):
         i.birthday = "8 AUG 1950"
         i.death = "8 AUG 1949"
         story_checker = UserStoryChecker()
+        story_checker.individuals = [i]
         birth_before_death = story_checker.birth_before_death()
         #Lists if errors pop out and aren't caught
         self.assertEqual(birth_before_death, None) 
