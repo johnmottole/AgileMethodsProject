@@ -34,6 +34,10 @@ class UserStoryChecker:
         self.unique_first_names()
         #US26
         self.corresp_entries()
+        #US19
+        self.first_cousins()
+        #US20
+        self.aunts_uncles()
         #US27 and US28 defined in main.py, because they must
         #run whenever individuals and families are put together
         print("US27 and US28 can be seen in individual and family summaries.")
@@ -177,7 +181,81 @@ class UserStoryChecker:
                 if ind.gender == 'F':
                     if the_fam_s.husband_id in the_fam_c.children:
                         print("Error US18: " + ind.name + " " + ind.id + " is married to a sibling.")
-        
+    
+    #US19 First Cousins should not marry
+    def first_cousins(self):
+        for ind in self.individuals:
+            if ind.spouse != 'NA':
+                continue
+            cousins_list = self.get_relatives(ind, "cousin")
+            if(not cousins_list):
+                continue
+            print("COUSINS ARE: ")
+            print(cousins_list)
+            for cousin in cousins_list:
+                if(ind.spouse == cousin):
+                    print("Error US19: " + ind.name + " " + ind.id + " is married to a first cousin")
+
+    def aunts_uncles(self):
+        for ind in self.individuals:
+            if(ind.spouse != 'NA'):
+                continue
+            aunts_and_uncles = self.get_relatives(ind, "aunt")
+            if(not aunts_and_uncles):
+                continue
+            print("AUNTS AND UNCLES ARE: ")
+            print(aunts_and_uncles)
+            for person in aunts_and_uncles:
+                if(ind.spouse == person):
+                    print("Error US20: " + ind.name + " " + ind.id + " is married to a niece or nephew")
+
+    ##gets different levels of relatives
+    ##pass parameter "cousin" to get first cousins
+    ##otherwise get aunts and uncles
+    def get_relatives(self, ind, level):
+        #print(" ID IS : " + ind.id)
+        mom = ""
+        dad = ""
+        ##aunts_uncles = []
+        cousins_list = []
+        mom_sibs = []
+        dad_sibs = []
+        ##mom_cousins = []
+        ##dad_cousins = []
+        for f in self.families:
+            for c in f.children:
+                if(c == ind.id):
+                    mom = f.wife_id
+                    dad = f.husband_id
+        for f in self.families:
+            for c in f.children:
+                if(c == mom):
+                    mom_sibs = f.children
+                    mom_sibs.remove(c)
+        for f in self.families:
+            for c in f.children:
+                if(c == dad):
+                    dad_sibs = f.children
+                    dad_sibs.remove(c)
+        if(level == "cousin"):
+            for f in self.families:
+                for person in dad_sibs:
+                    if(f.husband_id == person or f.wife_id == person):
+                        cousins_list = cousins_list + f.children
+            for f in self.families:
+                for person in mom_sibs:
+                    if(f.husband_id == person or f.wife_id == person):
+                        cousins_list = cousins_list + f.children
+        else:
+            ##print("MOM SIBS: " + str(mom_sibs))
+            ##print("DAD SIBS: " + str(dad_sibs))
+            if(mom_sibs):
+                cousins_list = cousins_list + mom_sibs
+            if(dad_sibs):
+                cousins_list = cousins_list + dad_sibs
+        ##print(cousins_list)
+        return cousins_list
+            
 ##        for f in self.families:
 ##            for child in f.children:
 ##                myChild = self.find_by_id(self.individuals, child)
@@ -359,6 +437,9 @@ class UserStoryChecker:
             return fam.children
 
 
+   
+
+        
 
 
 
