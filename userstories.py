@@ -13,6 +13,10 @@ class UserStoryChecker:
         self.dates_before_today()
         #US02
         self.birth_before_marriage()
+        #US03
+        self.birth_before_death()
+        #US04
+        self.marriage_before_divorce()
         #User story 9
         self.birth_before_death_of_parent()
         #User Story 10
@@ -179,6 +183,29 @@ class UserStoryChecker:
                             print("Error US02: {} married before they were born.".format(i.name))
                     except:
                         pass
+
+    #User story 3
+    def birth_before_death(self):
+        for i in self.individuals:
+            birthday = i.birthday
+            death = i.death
+            if death != None:
+                try:
+                    if self.compare_dates(death, birthday) > 0:
+                        print("Error US03: {} died before they were born.".format(i.name))
+                except:
+                    pass
+    #User story 4
+    def marriage_before_divorce(self):
+        for f in self.families:
+            marriage = f.married
+            divorced = f.divorced
+            if divorced != None and marriage != None:
+                try:
+                    if self.compare_dates(divorced, marriage) > 0:
+                        print ("Error US04: {} and {} divorced before they were married.".format(f.husband_name, f.wife_name))
+                except:
+                    pass
 
     #User story 25
     #no more than one child with same name and birth date in fam
