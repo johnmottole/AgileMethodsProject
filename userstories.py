@@ -140,7 +140,7 @@ class UserStoryChecker:
             for child in f.children:
                 child = self.find_by_id(self.individuals,child)
                 child_bday = child.birthday
-                print(child_bday)
+                #print(child_bday)
                 diff_mother = self.compare_dates(wife_bday, child_bday) / 365
                 diff_father = self.compare_dates(husband_bday, child_bday) / 365
                 if (diff_mother > 60):
