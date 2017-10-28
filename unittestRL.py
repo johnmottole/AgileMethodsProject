@@ -292,7 +292,36 @@ class Test(unittest.TestCase):
         story_checker.individuals = [i]
         birth_before_death = story_checker.birth_before_death()
         #Lists if errors pop out and aren't caught
-        self.assertEqual(birth_before_death, None) 
+        self.assertEqual(birth_before_death, None)
+
+    def test_marriage_before_death(self):
+        i = Individual()
+        i.name = "Bill /Smith/"
+        i.death = "8 AUG 2000"
+        i.spouse = "@F1@"
+        f = Family()
+        f.id = "@F1@"
+        f.married = "8 AUG 2010"
+        story_checker = UserStoryChecker()
+        story_checker.individuals = [i]
+        story_checker.families = [f]
+        marriage_before_death = story_checker.marriage_before_death()
+        self.assertEqual("Bill /Smith/",  marriage_before_death[0])
+    
+    def test_divorce_before_death(self):
+        i = Individual()
+        i.name = "Bill /Smith/"
+        i.death = "8 AUG 2000"
+        i.spouse = "@F1@"
+        f = Family()
+        f.id = "@F1@"
+        f.divorced = "8 AUG 2010"
+        story_checker = UserStoryChecker()
+        story_checker.individuals = [i]
+        story_checker.families = [f]
+        divorce_before_death = story_checker.divorce_before_death()
+        self.assertEqual("Bill /Smith/",  divorce_before_death[0])
+
 
 
 if __name__ == '__main__':
