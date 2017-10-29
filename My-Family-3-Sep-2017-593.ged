@@ -219,7 +219,16 @@
 1 FAMC @F7@
 1 FAMS @F9@
 
-<<<<<<< HEAD
+0 @I50@ INDI
+1 NAME Megan /Little/
+2 GIVN Megan
+2 SURN Little
+1 SEX F
+1 BIRT
+2 DATE 17 MAY 1989
+1 FAMC @F7@
+1 FAMS @F9@
+
 0 @I50@ INDI
 1 NAME Megan /Little/
 2 GIVN Megan
@@ -238,7 +247,6 @@
 2 DATE 13 MAY 1930
 1 _CURRENT Y
 
-=======
 0 @I21@ INDI
 1 NAME Number1 /Twin/
 2 GIVN Number1
@@ -293,7 +301,6 @@
 1 BIRT
 2 DATE 17 MAY 2004
 1 FAMC @F10@
->>>>>>> 5c8d06fc0ebd362f689de8c6bb0b63be2d89cb17
 0 @F1@ FAM
 1 HUSB @I2@
 1 WIFE @I3@

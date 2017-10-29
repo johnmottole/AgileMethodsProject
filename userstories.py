@@ -51,7 +51,8 @@ class UserStoryChecker:
         #US21
         self.gender_roles()
         #US22
-        self.unique_ids()
+        self.unique_ids_fam()
+        self.unique_ids_ind()
         print("US27 and US28 can be seen in individual and family summaries.")
 
 
@@ -570,11 +571,11 @@ class UserStoryChecker:
             if(wife.gender != "F"):
                 print("ERROR US21 " + wife.name + " is a male wife")
     #US22, All IDS individual or family should be unique
-    def unique_ids(self):
+    def unique_ids_fam(self):
         match_arr = 0
         not_unique = False
         repeat_fams = []
-        repeat_indivs = []
+       
         for fam in self.families:
             myID = fam.id
             ##print(myID)
@@ -591,6 +592,10 @@ class UserStoryChecker:
                 print("ERROR US22 " + f + " is not unique family")
             not_unique = False
             return True
+    def unique_ids_ind(self):
+        match_arr = 0
+        not_unique = False
+        repeat_indivs = []
         for indiv in self.individuals:
             myIndID = indiv.id
             for other_indiv in self.individuals:
