@@ -44,6 +44,10 @@ class UserStoryChecker:
         self.aunts_uncles()
         #US27 and US28 defined in main.py, because they must
         #run whenever individuals and families are put together
+        #US21
+        self.gender_roles()
+        #US22
+        self.unique_ids()
         print("US27 and US28 can be seen in individual and family summaries.")
 
 
@@ -187,12 +191,13 @@ class UserStoryChecker:
                     continue
                 the_fam_s = self.find_by_id(self.families, ind.spouse)
                 the_fam_c = self.find_by_id(self.families, ind.child)
-                if ind.gender == 'M':
-                    if the_fam_s.wife_id in the_fam_c.children:
-                        print("Error US18: " + ind.name + " " + ind.id + " is married to a sibling.")
-                if ind.gender == 'F':
-                    if the_fam_s.husband_id in the_fam_c.children:
-                        print("Error US18: " + ind.name + " " + ind.id + " is married to a sibling.")
+                if(the_fam_c):
+                    if ind.gender == 'M':
+                        if the_fam_s.wife_id in the_fam_c.children:
+                            print("Error US18: " + ind.name + " " + ind.id + " is married to a sibling.")
+                    if ind.gender == 'F':
+                        if the_fam_s.husband_id in the_fam_c.children:
+                            print("Error US18: " + ind.name + " " + ind.id + " is married to a sibling.")
     
     #US19 First Cousins should not marry
     def first_cousins(self):
@@ -509,6 +514,52 @@ class UserStoryChecker:
             return ret_lst
         else:
             return fam.children
+    #US21, husband should be male, wife should be female
+    def gender_roles(self):
+        for fam in self.families:
+            husband = self.find_by_id(self.individuals, fam.husband_id)
+            wife = self.find_by_id(self.individuals, fam.wife_id)
+            if(husband.gender != "M"):
+                print("ERROR US21 " + husband.name + " is a female husband")
+            if(wife.gender != "F"):
+                print("ERROR US21 " + wife.name + " is a male wife")
+    #US22, All IDS individual or family should be unique
+    def unique_ids(self):
+        match_arr = 0
+        not_unique = False
+        repeat_fams = []
+        repeat_indivs = []
+        for fam in self.families:
+            myID = fam.id
+            ##print(myID)
+            for other_fam in self.families:
+                if(myID == other_fam.id):
+                    match_arr = match_arr + 1
+            if(match_arr > 1):
+                not_unique = True
+                repeat_fams.append(myID)
+            match_arr = 0
+        if(not_unique):
+            repeat_fams = set(repeat_fams)
+            for f in repeat_fams:
+                print("ERROR US22 " + f + " is not unique family")
+            not_unique = False
+            return True
+        for indiv in self.individuals:
+            myIndID = indiv.id
+            for other_indiv in self.individuals:
+                if(myIndID == other_indiv.id):
+                    match_arr = match_arr + 1
+                if(match_arr > 1):
+                    not_unique = True
+                    repeat_indivs.append(myIndID)
+            match_arr = 0
+        if(not_unique):
+            repeat_indivs = set(repeat_indivs)
+            for i in repeat_indivs:
+                print("ERROR US22 " + i + " is not a unique individual ID")
+            not_unique = False
+            return True
 
 
    

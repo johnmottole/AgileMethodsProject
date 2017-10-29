@@ -216,6 +216,13 @@ class Test(unittest.TestCase):
     def test_first_cousins(self):
         story_checker = UserStoryChecker()
         self.assertTrue(story_checker.first_cousins())
+    def test_unique_ids(self):
+        story_checker = UserStoryChecker()
+        self.assertTrue(story_checker.aunts_uncles())
+    def test_gender_roles(self):
+        story_checker = UserStoryChecker()
+        self.assertTrue(story_checker.aunts_uncles())
+
 
 
     def test_bigamy(self):
