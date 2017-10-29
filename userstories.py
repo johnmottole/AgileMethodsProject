@@ -30,6 +30,10 @@ class UserStoryChecker:
         self.no_bigamy()
         #User Story 12
         self.parents_to_old()
+        #User story 13
+        self.sibling_spacing()
+        # User story 14
+        self.multuple_births()
         #US17
         self.marriage_to_descend()
         #US18
@@ -154,6 +158,48 @@ class UserStoryChecker:
                     print("Error US12: " + child.name + "(" + child.id + ") is more than 80 years younger than father")
                     error_messages += ["Error US12: " + child.name + "(" + child.id + ") is more than 80 years younger than father"]
         return error_messages
+
+    #User story 13
+    def sibling_spacing(self):
+        matches = []
+        for f in self.families:
+            children_objs = []
+            children_ids = f.children
+            for id in children_ids:
+                children_objs += [self.find_by_id(self.individuals,id)]
+            for child in children_objs:
+                for sibling in children_objs:
+                    if child.id != sibling.id:
+                        diff = self.compare_dates(child.birthday,sibling.birthday)
+                        if diff < 30*8 and diff > 2:
+                            matches += [[child,sibling]]
+        for m in matches:
+            print("Error US13: Siblings " + m[0].name + " (" + m[0].id + ") and " + m[1].name + " (" + m[1].id + ") are not spaced correctly")
+        return matches
+
+    #User story 14
+    def multuple_births(self):
+        error_families = []
+        for f in self.families:
+            children_objs = []
+            children_ids = f.children
+            for id in children_ids:
+                children_objs += [self.find_by_id(self.individuals, id)]
+            birth_dict = {}
+            for child in children_objs:
+                if child.birthday in birth_dict.keys():
+                    birth_dict[child.birthday] += [child.id]
+                else:
+                    birth_dict[child.birthday] = [child.id]
+
+            for key in birth_dict.keys():
+                if len(birth_dict[key]) > 5:
+                    print("Anomaly US14: Too many children born to family " + f.id + " on " + key + " (" + str(birth_dict[key]) +")")
+                    error_families += [f]
+        return error_families
+
+
+
 
 
     #user story 17, parents should not marry descendants
