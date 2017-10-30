@@ -217,11 +217,21 @@ class Test(unittest.TestCase):
         story_checker = UserStoryChecker()
         self.assertTrue(story_checker.first_cousins())
     def test_unique_ids_fam(self):
+        fam1 = Family()
+        fam2 = Family()
+        fam1.id = "@F1@"
+        fam2.id = "@F1@"
         story_checker = UserStoryChecker()
-        self.assertTrue(story_checker.unique_ids_fam())
+        story_checker.families = [fam1, fam2]
+        self.assertTrue({"@F1@"}, story_checker.unique_ids_fam())
     def test_unique_ids_ind(self):
+        ind1 = Individual()
+        ind2 = Individual()
+        ind1.id = "@I1@"
+        ind2.id = "@I1@"
         story_checker = UserStoryChecker()
-        self.assertTrue(story_checker.unique_ids_ind())
+        story_checker.individuals = [ind1, ind2]
+        self.assertEqual({"@I1@"}, story_checker.unique_ids_ind())
     def test_gender_roles(self):
         story_checker = UserStoryChecker()
         self.assertTrue(story_checker.gender_roles())

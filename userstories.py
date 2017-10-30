@@ -591,7 +591,8 @@ class UserStoryChecker:
             for f in repeat_fams:
                 print("ERROR US22 " + f + " is not unique family")
             not_unique = False
-            return True
+        return repeat_fams
+
     def unique_ids_ind(self):
         match_arr = 0
         not_unique = False
@@ -610,7 +611,7 @@ class UserStoryChecker:
             for i in repeat_indivs:
                 print("ERROR US22 " + i + " is not a unique individual ID")
             not_unique = False
-            return True
+        return repeat_indivs
 
 
    
