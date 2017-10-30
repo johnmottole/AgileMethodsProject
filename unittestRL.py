@@ -209,6 +209,35 @@ class Test(unittest.TestCase):
         child_three.age = story_checker.age_adder(child_three)
         # test
         self.assertTrue(child_one.age == '20')
+
+    #RL -- test list printer returns
+    def test_list_dead(self):
+        child_one = Individual()
+        child_one.id = "@I1@"
+        child_one.name = "Ryan Little"
+        child_one.birthday = "5 APR 1997"
+        child_one.death = "6 APR 1999"
+
+        story_checker = UserStoryChecker()
+        story_checker.individuals = [child_one]
+        individuals = [child_one]
+
+        self.assertTrue(individuals == story_checker.list_dead())
+
+    def test_list_living_married(self):
+        child_one = Individual()
+        child_one.id = "@I1@"
+        child_one.name = "Ryan Little"
+        child_one.birthday = "5 APR 1997"
+        child_one.death = "NA"
+        child_one.spouse = "@I99@"
+
+        story_checker = UserStoryChecker()
+        story_checker.individuals = [child_one]
+        individuals = [child_one]
+
+        self.assertTrue(individuals == story_checker.list_living_married())
+
     ##Just going to assert true so I don't have to make a whole chain of families, using the edited GEDCOM file instead
     def test_aunts_uncles(self):
         story_checker = UserStoryChecker()
@@ -217,11 +246,21 @@ class Test(unittest.TestCase):
         story_checker = UserStoryChecker()
         self.assertTrue(story_checker.first_cousins())
     def test_unique_ids_fam(self):
+        fam1 = Family()
+        fam2 = Family()
+        fam1.id = "@F1@"
+        fam2.id = "@F1@"
         story_checker = UserStoryChecker()
-        self.assertTrue(story_checker.unique_ids_fam())
+        story_checker.families = [fam1, fam2]
+        self.assertTrue({"@F1@"}, story_checker.unique_ids_fam())
     def test_unique_ids_ind(self):
+        ind1 = Individual()
+        ind2 = Individual()
+        ind1.id = "@I1@"
+        ind2.id = "@I1@"
         story_checker = UserStoryChecker()
-        self.assertTrue(story_checker.unique_ids_ind())
+        story_checker.individuals = [ind1, ind2]
+        self.assertEqual({"@I1@"}, story_checker.unique_ids_ind())
     def test_gender_roles(self):
         story_checker = UserStoryChecker()
         self.assertTrue(story_checker.gender_roles())

@@ -1,5 +1,6 @@
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
+from prettytable import PrettyTable
 from operator import itemgetter, attrgetter
 
 class UserStoryChecker:
@@ -10,6 +11,12 @@ class UserStoryChecker:
     def check_all_stories(self, i, f):
         self.individuals = i
         self.families = f
+
+        # US29 these are out of order bc they print tables
+        self.list_dead()
+        #US30
+        self.list_living_married()
+
         #US01
         self.dates_before_today()
         #US02
@@ -561,6 +568,41 @@ class UserStoryChecker:
             return ret_lst
         else:
             return fam.children
+
+    #US29 list all deceased in GEDCOM
+    def list_dead(self):
+        ret = []
+        for ind in self.individuals:
+            if ind.death != "NA":
+                ret.append(ind)
+        tbl = PrettyTable()
+        tbl.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+        num_records = len(ret)
+        ind = 0
+        while (ind < num_records):
+            tbl.add_row([ret[ind].id, ret[ind].name, ret[ind].gender, ret[ind].birthday, ret[ind].age, ret[ind].alive, ret[ind].death, ret[ind].child, ret[ind].spouse])
+            ind+=1
+        print("These are the deceased members of this family: ")
+        print(tbl)
+        return ret
+
+    #US30 list all living married members
+    def list_living_married(self):
+        ret = []
+        for ind in self.individuals:
+            if ind.death == "NA" and ind.spouse != "NA":
+                ret.append(ind)
+        tbl = PrettyTable()
+        tbl.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+        num_records = len(ret)
+        ind = 0
+        while (ind < num_records):
+            tbl.add_row([ret[ind].id, ret[ind].name, ret[ind].gender, ret[ind].birthday, ret[ind].age, ret[ind].alive, ret[ind].death, ret[ind].child, ret[ind].spouse])
+            ind += 1
+        print("These are the living, married members of this family: ")
+        print(tbl)
+        return ret
+
     #US21, husband should be male, wife should be female
     def gender_roles(self):
         for fam in self.families:
@@ -591,7 +633,8 @@ class UserStoryChecker:
             for f in repeat_fams:
                 print("ERROR US22 " + f + " is not unique family")
             not_unique = False
-            return True
+        return repeat_fams
+
     def unique_ids_ind(self):
         match_arr = 0
         not_unique = False
@@ -610,7 +653,7 @@ class UserStoryChecker:
             for i in repeat_indivs:
                 print("ERROR US22 " + i + " is not a unique individual ID")
             not_unique = False
-            return True
+        return repeat_indivs
 
 
    
