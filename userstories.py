@@ -43,7 +43,7 @@ class UserStoryChecker:
         #US26
         self.corresp_entries()
         #US19
-        ##self.first_cousins()
+        self.first_cousins()
         #US20
         self.aunts_uncles()
         #US27 and US28 defined in main.py, because they must
