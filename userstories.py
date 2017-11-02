@@ -367,6 +367,7 @@ class UserStoryChecker:
     #User story 1, dates not after current date                
     def dates_before_today(self):
         current_date = date.today().strftime('%d %b %Y')
+        error_list =[]
 
         for i in self.individuals:
             individual_birthday = i.birthday
@@ -374,12 +375,14 @@ class UserStoryChecker:
             try:
                 if self.compare_dates(current_date, individual_birthday) > 0:
                     print("Error US01: {} birthday is after today; are you a time traveler?".format(i.name))
+                    error_list.append(i.birthday)
             except:
                 pass
             if (individual_death != None):
                 try:
                     if self.compare_dates(current_date, individual_death) > 0:
                         print("Error US01: {} date of death is after today; are you a time traveler?".format(i.name))
+                        error_list.append(i.death)
                 except:
                     pass
         #Need to check for existence of dates first before try except        
@@ -390,6 +393,7 @@ class UserStoryChecker:
                 try:
                     if self.compare_dates(current_date, divorce_date) > 0:
                         print("Error US01: {} and {}'s- divorce date is after today; are you a time traveler?".format(f.husband_name, f.wife_name))
+                        error_list.append(f.divorced)
                 except:
                     pass
                 
@@ -397,12 +401,13 @@ class UserStoryChecker:
                 try:
                     if self.compare_dates(current_date, married_date) > 0:
                         print("Error US01: {} and {}'s marriage date is after today; are you a time traveler?".format(f.husband_name, f.wife_name))
+                        error_list.append(f.married)
                 except:
                     pass
-
+        return error_list
     #User story 2
     def birth_before_marriage(self):
-        
+        error_list = []
         for i in self.individuals:
             birthday = i.birthday
             #Need to create new object to hold family class to sort by values
@@ -413,9 +418,10 @@ class UserStoryChecker:
                     try:
                         if self.compare_dates(birthday, marriage_date) < 0:
                             print("Error US02: {} married before they were born.".format(i.name))
+                            error_list.append(i.name)
                     except:
                         pass
-
+        return error_list
     #User story 3
     def birth_before_death(self):
         for i in self.individuals:
