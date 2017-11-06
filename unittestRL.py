@@ -371,6 +371,44 @@ class Test(unittest.TestCase):
         story_checker.families = [f]
         divorce_before_death = story_checker.divorce_before_death()
         self.assertEqual("Bill /Smith/",  divorce_before_death[0])
+
+    def test_younger_than_150(self):
+        i = Individual()
+        i.name = "John /Doe/"
+        i.birthday = "8 AUG 1800"
+        story_checker = UserStoryChecker()
+        story_checker.individuals = [i]
+        younger = story_checker.younger_than_150()
+        self.assertTrue(younger.get(i.name) == "8 AUG 1800")
+
+    def test_birth_before_parents(self):
+        ind1 = Individual()
+        ind2 = Individual()
+        ind3 = Individual()
+        ind1.name = "John /Doe"
+        ind2.name = "Mom /Doe/"
+        ind3.name = "Dad /Doe/"
+        ind1.child = "@F1@"
+        ind1.id = "@I1@"
+        ind3.id = "@I3@"
+        ind2.id = "@I2@"
+        ind2.spouse = "@F1@"
+        ind3.spouse = "@F1@"
+        ind1.birthday = "8 AUG 1900"
+        ind2.birthday = "8 AUG 1950"
+        ind3.birthday = "8 AUG 1960"
+        fam1 = Family()
+        fam1.id = "@F1@"
+        fam1.husband_id = "@I3@"
+        fam1.wife_id = "@I2@"
+        fam1.children = ["@I1@"]
+        story_checker = UserStoryChecker()
+        story_checker.individuals = [ind1, ind2, ind3]
+        story_checker.families = [fam1]
+        older = story_checker.birth_before_parents()
+
+        self.assertEqual(older.get(ind1.name), [ind2.name, ind3.name])
+
     def test_sibling_spacing(self):
         ind1 = Individual()
         ind1.name = "Sibling1"

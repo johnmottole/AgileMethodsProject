@@ -29,6 +29,10 @@ class UserStoryChecker:
         self.marriage_before_death()
         #US06
         self.divorce_before_death()
+        #US07
+        self.younger_than_150()
+        #US08
+        self.birth_before_parents()
         #User story 9
         self.birth_before_death_of_parent()
         #User Story 10
@@ -75,6 +79,11 @@ class UserStoryChecker:
         d1 = datetime.strptime(date1, '%d %b %Y')
         d2 = datetime.strptime(date2, '%d %b %Y')
         return (d2 - d1).days
+
+    def compare_years(self, date1, date2):
+        d1 = datetime.strptime(date1, '%d %b %Y')
+        d2 = datetime.strptime(date2, '%d %b %Y')
+        return (d2-d1).days/365.2425
 
     # User story 09, Birth before death of parents
     def birth_before_death_of_parent(self):
@@ -477,8 +486,47 @@ class UserStoryChecker:
                             error_list.append(i.name)
                     except:
                         pass
-        return error_list                
+        return error_list
 
+    #User story 7
+    def younger_than_150(self):
+        current_date = date.today().strftime('%d %b %Y')
+        errors = {}
+        for i in self.individuals:
+            name = i.name
+            birthday = i.birthday
+            if self.compare_years(birthday, current_date) >= 150:
+                print("Anomaly US07: {} is older than 150 years old.".format(name))
+                errors.update({'{}'.format(name): birthday})
+        return errors
+
+    # User story 8                
+    def birth_before_parents(self):
+        errors = {}
+        for individual in self.individuals:
+            name = individual.name
+            bday = individual.birthday
+            family = self.find_by_id(self.families,individual.child)
+            if family != None:
+                mother_id = family.wife_id
+                father_id = family.husband_id
+                mother = self.find_by_id(self.individuals,mother_id)
+                father = self.find_by_id(self.individuals, father_id)
+                mother_name = mother.name
+                father_name = father.name
+                mother_birthday = mother.birthday
+                father_birthday = father.birthday
+                if self.compare_dates(bday, mother_birthday) > 0 and self.compare_dates(bday, father_birthday) > 0 :
+                    print("Error US08: {} is older than their mother {} and father {}.".format(name, mother_name, father_name))
+                    errors.update({name: [mother_name, father_name]})
+                elif self.compare_dates(bday, mother_birthday) > 0 and self.compare_dates(bday, father_birthday) < 0:
+                    print("Error US08: {} is older than their mother {}.".format(name, mother_name))
+                    errors.update({name: mother_name})
+                elif self.compare_dates(bday, mother_birthday) < 0 and self.compare_dates(bday, father_birthday) > 0:
+                    print("Error US08: {} is older than their father {}.".format(name, father_name))
+                    errors.update({name: father_name})
+        print(errors)
+        return errors
     #User story 25
     #no more than one child with same name and birth date in fam
     #returns list of lists of duplicates
