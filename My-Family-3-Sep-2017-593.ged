@@ -308,7 +308,6 @@
 1 MARR
 2 DATE 13 MAY 1930
 1 _CURRENT Y
-<<<<<<< HEAD
 
 0 @F10@ FAM
 1 HUSB @I1@
@@ -317,8 +316,6 @@
 2 DATE 13 MAY 1930
 1 _CURRENT Y
 
-=======
->>>>>>> 5c8d06fc0ebd362f689de8c6bb0b63be2d89cb17
 0 @F10@ FAM
 1 HUSB @I1@
 1 WIFE @I12@

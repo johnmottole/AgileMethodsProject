@@ -225,26 +225,22 @@ class UserStoryChecker:
 
     #user story 17, parents should not marry descendants
     def marriage_to_descend(self):
-        for f in self.families:
-            mother = f.wife_id
-            father= f.husband_id
-            for child in f.children:
-                #RL-- edited because was checking fam tags against indi tags
-                #now actually checks for marriage to children
-                myChild = self.find_by_id(self.individuals, child)
-                if myChild.spouse == 'NA':
-                    continue
-                their_fam = self.find_by_id(self.families, myChild.spouse)
-                if myChild.gender == 'M':
-                    childSpouse = their_fam.wife_id
-                if myChild.gender == 'F':
-                    childSpouse = their_fam.husband_id
-                if(childSpouse == mother):
-                    mom = self.find_by_id(self.individuals, mother)
-                    print("Error US17:  " + mom.name + " (" + mom.id + ") is married to a descendant")
-                if(childSpouse == father):
-                    dad = self.find_by_id(self.individuals, father)
-                    print("Error US17: " + dad.name + " (" + dad.id + ") is married to a descendant ")
+        for i in self.individuals:
+                for f in self.families:
+                    if(i.id in f.children):
+                        #print("ID IS " + i.id)
+                        father = f.husband_id
+                        mother = f.wife_id
+                        for myFam in self.families:
+                            if(i.id == myFam.husband_id):
+                                if(mother == myFam.wife_id):
+                                    print("Error US17:  "  + mother + " is married to a descendant")
+                                    return mother
+                            if(i.id == myFam.wife_id):
+                                if(father == myFam.husband_id):
+                                    print("Error US17:  "  + father + " is married to a descendant")
+                                    return father
+
                     
     # US18 no marriage to siblings
     def marriage_to_sibling(self):
