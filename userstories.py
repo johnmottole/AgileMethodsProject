@@ -525,7 +525,6 @@ class UserStoryChecker:
                 elif self.compare_dates(bday, mother_birthday) < 0 and self.compare_dates(bday, father_birthday) > 0:
                     print("Error US08: {} is older than their father {}.".format(name, father_name))
                     errors.update({name: father_name})
-        print(errors)
         return errors
     #User story 25
     #no more than one child with same name and birth date in fam
