@@ -16,6 +16,8 @@ class UserStoryChecker:
         self.list_dead()
         #US30
         self.list_living_married()
+        #US31
+        self.list_living_single()
 
         #US01
         self.dates_before_today()
@@ -45,6 +47,10 @@ class UserStoryChecker:
         self.sibling_spacing()
         # User story 14
         self.multuple_births()
+        #User story 15
+        self.fewer_15_siblings()
+        #user story 16
+        self.male_last_names()
         #US17
         self.marriage_to_descend()
         #US18
@@ -224,7 +230,32 @@ class UserStoryChecker:
         return error_families
 
 
+    #user story 15, there should be less than 15 sblings
+    def fewer_15_siblings(self):
+        problem_families = []
+        for f in self.families:
+            if len(f.children) >= 15:
+                print("Anomaly US15: There is 15 or more siblings in family " + f.id)
+                problem_families += [f]
+        return problem_families
 
+    #user story 16, male last names
+    def male_last_names(self):
+        problem_families = []
+        for f in self.families:
+            split_husband_name = f.husband_name.split()
+            if len(split_husband_name) > 1:
+                family_name = split_husband_name[1]
+                for child_id in f.children:
+                    child = self.find_by_id(self.individuals,child_id)
+                    if child.gender == 'M':
+                        split_child_name = child.name.split()
+                        if len(split_child_name) > 1:
+                            if split_child_name[1] != family_name:
+                                print("Anomaly US16: Male family names don't match in family " + f.id)
+                                problem_families += [f]
+                                break
+        return problem_families
 
 
     #user story 17, parents should not marry descendants
@@ -697,6 +728,22 @@ class UserStoryChecker:
             tbl.add_row([ret[ind].id, ret[ind].name, ret[ind].gender, ret[ind].birthday, ret[ind].age, ret[ind].alive, ret[ind].death, ret[ind].child, ret[ind].spouse])
             ind += 1
         print("These are the living, married members of this family: ")
+        print(tbl)
+        return ret
+    #US31 list all living single members of the family
+    def list_living_single(self):
+        ret = []
+        for ind in self.individuals:
+            if ind.spouse == "NA" and ind.death == "NA":
+                ret.append(ind);
+            tbl = PrettyTable()
+            tbl.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+        num_records = len(ret)
+        ind = 0
+        while (ind < num_records):
+            tbl.add_row([ret[ind].id, ret[ind].name, ret[ind].gender, ret[ind].birthday, ret[ind].age, ret[ind].alive, ret[ind].death, ret[ind].child, ret[ind].spouse])
+            ind += 1
+        print("These are the living, single members of this family: ")
         print(tbl)
         return ret
 
