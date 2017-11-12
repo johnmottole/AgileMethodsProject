@@ -64,6 +64,10 @@ class UserStoryChecker:
         #US22
         self.unique_ids_fam()
         self.unique_ids_ind()
+        #US23
+        self.unique_names_gedcom()
+        #24
+        self.unique_spouses()
         print("US27 and US28 can be seen in individual and family summaries.")
 
 
@@ -538,6 +542,50 @@ class UserStoryChecker:
                               " and Child " + kid_comp.name + " ("+ kid_comp.id +") have same Name and Birthday.")
                             errors.append([kid.id, kid_comp.id])
         return errors
+    #US23 unique names in entire GEDCOM
+    def unique_names_gedcom(self):
+        match_arr = 0
+        not_unique = False
+        repeat_indivs = []
+        for indiv in self.individuals:
+            myIndName = indiv.name
+            for other_indiv in self.individuals:
+                if(myIndName == other_indiv.name):
+                    match_arr = match_arr + 1
+                if(match_arr > 1):
+                    not_unique = True
+                    repeat_indivs.append(myIndName)
+            match_arr = 0
+        if(not_unique):
+            repeat_indivs = set(repeat_indivs)
+            for i in repeat_indivs:
+                print("ERROR US23 " + i + " is not a unique name")
+            not_unique = False
+        return repeat_indivs
+
+    #US24
+    def unique_spouses(self):
+        match_arr = 0
+        not_unique = False
+        repeat_fams = []
+        for family in self.families:
+            myHusb = family.husband_id
+            myWife = family.wife_id
+            marriageDate = family.married
+            for other_fam in self. families:
+                otherHusb = other_fam.husband_id
+                otherWife = other_fam.wife_id
+                otherMarriageDate = other_fam.married
+                if(myHusb == otherHusb or myWife == otherWife and marriageDate == otherMarriageDate):
+                    match_arr = match_arr + 1
+                if(match_arr > 1):
+                    not_unique = True
+                    repeat_fams.append(family.id)
+            match_arr = 0
+        if(not_unique):
+            repeat_fams = set(repeat_fams)
+            for i in repeat_fams:
+                print("ERROR US24 " + i + " is not a unique family by spouse")
     
     #US26
     #Keep Individual and Family lists consistent
