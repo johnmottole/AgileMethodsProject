@@ -18,7 +18,8 @@ class UserStoryChecker:
         self.list_living_married()
         #US31
         self.list_living_single()
-
+        #US32
+        self.list_multiple_births()
         #US01
         self.dates_before_today()
         #US02
@@ -697,6 +698,33 @@ class UserStoryChecker:
             ind += 1
         print("These are the living, single members of this family: ")
         print(tbl)
+        return ret
+
+    #US32 list all multiple births in a gedcom file
+    def list_multiple_births(self):
+        indis = self.individuals
+        temp = []
+        ret = []
+        for fam in self.families:
+            if len(fam.children) > 1:
+                #first_kid = self.find_by_id(indis, fam.children[0])
+                same_dates = []
+                for kid1 in fam.children:
+                    temp = []
+                    kidone = self.find_by_id(indis, kid1)
+                    for kid2 in fam.children:
+                        kidtwo = self.find_by_id(indis, kid2)
+                        if kidone.birthday == kidtwo.birthday and kidone.birthday not in same_dates and kidone.id != kidtwo.id:
+                            if kidone.id not in temp:
+                                temp.append(kidone.id)
+                            if kidtwo.id not in temp:
+                                temp.append(kidtwo.id)
+                    if len(temp) > 1:
+                        same_dates.append(kidone.birthday)
+                        ret.append(temp)
+        print("These are all of the multiple births")
+        for mult in ret:
+            print(mult)
         return ret
 
     #US21, husband should be male, wife should be female

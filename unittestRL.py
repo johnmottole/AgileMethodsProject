@@ -237,6 +237,51 @@ class Test(unittest.TestCase):
         individuals = [child_one]
 
         self.assertTrue(individuals == story_checker.list_living_married())
+    def test_list_living_single(self):
+        child_one = Individual()
+        child_one.id = "@I1@"
+        child_one.name = "Ryan Little"
+        child_one.birthday = "5 APR 1997"
+        child_one.death = "NA"
+        child_one.spouse = "@I99@"
+
+        child_two = Individual()
+        child_two.id = "@I2@"
+        child_two.name = "Ryan Little"
+        child_two.birthday = "5 APR 1997"
+
+        story_checker = UserStoryChecker()
+        story_checker.individuals = [child_one, child_two]
+        individuals = [child_two]
+        self.assertTrue(individuals == story_checker.list_living_single())
+
+    def test_list_multiple_births(self):
+        child_one = Individual()
+        child_one.id = "@I1@"
+        child_one.name = "Ryan Little"
+        child_one.birthday = "5 APR 1997"
+
+        child_two = Individual()
+        child_two.id = "@I2@"
+        child_two.name = "child2"
+        child_two.birthday = "5 APR 1997"
+
+        child_three = Individual()
+        child_three.id = "@I3@"
+        child_three.name = "child3"
+        child_three.birthday = "5 APR 1997"
+
+        fam1 = Family()
+        fam1.id = "one"
+        fam1.children = ["@I1@","@I2@","@I3@"]
+
+        story_checker = UserStoryChecker()
+        story_checker.families = [fam1]
+        story_checker.individuals = [child_one, child_two, child_three]
+        res = [["@I1@","@I2@","@I3@"]]
+        #print(story_checker.list_multiple_births())
+        self.assertTrue(res == story_checker.list_multiple_births())
+
     def test_marriage_to_descend(self):
         ind1 = Individual()
         ind1.name = "Husband1"
@@ -457,7 +502,7 @@ class Test(unittest.TestCase):
         storyChecker.individuals = [ind1, ind2]
         storyChecker.families = [fam1]
         sibling_pairs = storyChecker.sibling_spacing()
-        self.assertEquals(len(sibling_pairs),1)
+        self.assertEqual(len(sibling_pairs),1)
         self.assertIn(ind1,sibling_pairs[0])
         self.assertIn(ind2,sibling_pairs[0])
     def test_multiple_births(self):
@@ -491,7 +536,7 @@ class Test(unittest.TestCase):
         storyChecker.individuals = [ind1, ind2, ind3,ind4,ind5,ind6]
         storyChecker.families = [fam1]
         families_returned = storyChecker.multuple_births()
-        self.assertEquals(len(families_returned),1)
+        self.assertEqual(len(families_returned),1)
         self.assertIn(fam1,families_returned)
     def test_fewer_15_children(self):
         ind1 = Individual()
@@ -560,7 +605,7 @@ class Test(unittest.TestCase):
         storyChecker.individuals = [ind1, ind2, ind3, ind4, ind5, ind6]
         storyChecker.families = [fam1]
         families_returned = storyChecker.fewer_15_siblings()
-        self.assertEquals(len(families_returned), 1)
+        self.assertEqual(len(families_returned), 1)
         self.assertIn(fam1, families_returned)
     def test_male_last_names(self):
         ind2 = Individual()
@@ -581,7 +626,7 @@ class Test(unittest.TestCase):
         storyChecker.individuals = [ind2,ind3]
         storyChecker.families = [fam1,fam2]
         families_returned = storyChecker.male_last_names()
-        self.assertEquals(len(families_returned), 1)
+        self.assertEqual(len(families_returned), 1)
         self.assertIn(fam2, families_returned)
 
 
