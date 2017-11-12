@@ -493,6 +493,98 @@ class Test(unittest.TestCase):
         families_returned = storyChecker.multuple_births()
         self.assertEquals(len(families_returned),1)
         self.assertIn(fam1,families_returned)
+    def test_fewer_15_children(self):
+        ind1 = Individual()
+        ind1.name = "Sibling1"
+        ind1.id = "I01"
+        ind1.birthday = "7 JUN 1950"
+        ind2 = Individual()
+        ind2.name = "Sibling2"
+        ind2.id = "I02"
+        ind2.birthday = "7 JUN 1950"
+        ind3 = Individual()
+        ind3.name = "Sibling3"
+        ind3.id = "I03"
+        ind3.birthday = "7 JUN 1950"
+        ind4 = Individual()
+        ind4.name = "Sibling4"
+        ind4.id = "I04"
+        ind4.birthday = "7 JUN 1950"
+        ind5 = Individual()
+        ind5.name = "Sibling5"
+        ind5.id = "I05"
+        ind5.birthday = "7 JUN 1950"
+        ind6 = Individual()
+        ind6.name = "Sibling6"
+        ind6.id = "I06"
+        ind6.birthday = "7 JUN 1950"
+        ind7 = Individual()
+        ind7.name = "Sibling7"
+        ind7.id = "I07"
+        ind7.birthday = "7 JUN 1950"
+        ind8 = Individual()
+        ind8.name = "Sibling2"
+        ind8.id = "I02"
+        ind8.birthday = "7 JUN 1950"
+        ind9 = Individual()
+        ind9.name = "Sibling3"
+        ind9.id = "I03"
+        ind9.birthday = "7 JUN 1950"
+        ind10 = Individual()
+        ind10.name = "Sibling4"
+        ind10.id = "I04"
+        ind10.birthday = "7 JUN 1950"
+        ind11 = Individual()
+        ind11.name = "Sibling5"
+        ind11.id = "I05"
+        ind11.birthday = "7 JUN 1950"
+        ind12 = Individual()
+        ind12.name = "Sibling6"
+        ind12.id = "I06"
+        ind12.birthday = "7 JUN 1950"
+        ind13 = Individual()
+        ind13.name = "Sibling4"
+        ind13.id = "I04"
+        ind13.birthday = "7 JUN 1950"
+        ind14 = Individual()
+        ind14.name = "Sibling5"
+        ind14.id = "I05"
+        ind14.birthday = "7 JUN 1950"
+        ind15 = Individual()
+        ind15.name = "Sibling6"
+        ind15.id = "I06"
+        ind15.birthday = "7 JUN 1950"
+        fam1 = Family()
+        fam1.children = [ind1.id, ind2.id, ind3.id, ind4.id, ind5.id, ind6.id,ind7.id,ind8.id, ind9.id, ind10.id, ind11.id, ind12.id, ind13.id,ind14.id,ind15.id]
+        storyChecker = UserStoryChecker()
+        storyChecker.individuals = [ind1, ind2, ind3, ind4, ind5, ind6]
+        storyChecker.families = [fam1]
+        families_returned = storyChecker.fewer_15_siblings()
+        self.assertEquals(len(families_returned), 1)
+        self.assertIn(fam1, families_returned)
+    def test_male_last_names(self):
+        ind2 = Individual()
+        ind2.name = "Son LastName"
+        ind2.id = "I02"
+        ind2.gender = "M"
+        ind3 = Individual()
+        ind3.name = "Son DiffLast"
+        ind3.id = "I03"
+        ind3.gender = "M"
+        fam1 = Family()
+        fam1.children = [ind2.id]
+        fam1.husband_name = "father LastName"
+        fam2 = Family()
+        fam2.husband_name = "father LastName"
+        fam2.children = [ind3.id]
+        storyChecker = UserStoryChecker()
+        storyChecker.individuals = [ind2,ind3]
+        storyChecker.families = [fam1,fam2]
+        families_returned = storyChecker.male_last_names()
+        self.assertEquals(len(families_returned), 1)
+        self.assertIn(fam2, families_returned)
+
+
 
 
 
