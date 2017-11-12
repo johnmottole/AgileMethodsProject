@@ -316,7 +316,40 @@ class Test(unittest.TestCase):
         storyChecker.families = [fam2, fam1]
         marriedtodesc = storyChecker.marriage_to_descend()
         self.assertEqual(marriedtodesc,ind1.id)
-    ##Just going to assert true so I don't have to make a whole chain of families, using the edited GEDCOM file instead
+    def test_unique_spouses(self):
+        fam1 = Family()
+        fam2 = Family()
+        fam1.id = "@F1@"
+        fam2.id = "@F2@"
+        fam1.husband_id = "@I1@"
+        fam1.wife_id = "@I2@"
+        fam1.married = "11/12/2017"
+        fam2.husband_id = "@I1@"
+        fam2.wife_id = "@I3@"
+        fam2.married = "11/12/2017"
+        story_checker = UserStoryChecker()
+        story_checker.families = [fam1, fam2]
+        myList = story_checker.unique_spouses()
+        self.assertTrue("@F1@" in myList)
+    def test_unique_names_gedcom(self):
+        ind1 = Individual()
+        ind1.name = "Husband1"
+        ind1.id = "I01"
+        ind1.gender = 'M'
+       
+        ind2 = Individual()
+        ind2.name = "Husband1"
+        ind2.id = "I02"
+        ind2.gender = 'F'
+        ind2.spouse = ind1.id
+        ind3 = Individual()
+        ind3.name = "Husband2"
+        ind3.id = "I03"
+        ind3.gender = 'F'
+        story_checker = UserStoryChecker()
+        story_checker.individuals = [ind1, ind2, ind3]
+        myList = story_checker.unique_names_gedcom()
+        self.assertTrue("Husband1" in myList)
     def test_aunts_uncles(self):
         story_checker = UserStoryChecker()
 #        self.assertTrue(story_checker.aunts_uncles())
