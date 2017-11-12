@@ -16,6 +16,8 @@ class UserStoryChecker:
         self.list_dead()
         #US30
         self.list_living_married()
+        #US31
+        self.list_living_single()
 
         #US01
         self.dates_before_today()
@@ -678,6 +680,22 @@ class UserStoryChecker:
             tbl.add_row([ret[ind].id, ret[ind].name, ret[ind].gender, ret[ind].birthday, ret[ind].age, ret[ind].alive, ret[ind].death, ret[ind].child, ret[ind].spouse])
             ind += 1
         print("These are the living, married members of this family: ")
+        print(tbl)
+        return ret
+    #US31 list all living single members of the family
+    def list_living_single(self):
+        ret = []
+        for ind in self.individuals:
+            if ind.spouse == "NA" and ind.death == "NA":
+                ret.append(ind);
+            tbl = PrettyTable()
+            tbl.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+        num_records = len(ret)
+        ind = 0
+        while (ind < num_records):
+            tbl.add_row([ret[ind].id, ret[ind].name, ret[ind].gender, ret[ind].birthday, ret[ind].age, ret[ind].alive, ret[ind].death, ret[ind].child, ret[ind].spouse])
+            ind += 1
+        print("These are the living, single members of this family: ")
         print(tbl)
         return ret
 
