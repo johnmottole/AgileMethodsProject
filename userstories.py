@@ -617,6 +617,7 @@ class UserStoryChecker:
             repeat_fams = set(repeat_fams)
             for i in repeat_fams:
                 print("ERROR US24 " + i + " is not a unique family by spouse")
+        return repeat_fams
     
     #US26
     #Keep Individual and Family lists consistent
